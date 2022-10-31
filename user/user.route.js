@@ -3,10 +3,11 @@ const router = express.Router();
 
 const UserController = require('./user.controller');
 const userController = new UserController();
-// const auth = require('../middlewares/authMiddleware')    //미들웨어는 잠시 보류
+const loginMiddleware = require('../middlewares/authLoginUserMiddleware')
 
-// 로그인/
-router.get('/:postId', userController.signUp);                   //회원가입 하기
-router.post('/:postId', userController.signIn);                //로그인 하기
+router.post('/signup', loginMiddleware, userController.signup);
+router.post('/login', loginMiddleware, userController.login);
+router.post('/signup/emailDup', userController.emailDup);
+router.post('/signup/nicknameDup', userController.nicknameDup);
 
 module.exports = router;
