@@ -1,8 +1,34 @@
-const UserRepository = require("./user.repository");//리포지토리의 내용을 가져와야한다.
+const UserRepository = require("./user.repository");
+const bcript = require("bcrypt");
+const jwt = require("jsonwebtoken");
+require('dotenv').config();
 
 class UserService {
     userRepository = new UserRepository();
 
+    signup = async( locationId, nickname, password, email, profileImage )=>{
+        password = await bcript.hash(password, 10);
+        return await this.userRepository.signup({locationId, nickname, password, email, profileImage, createdAt: Date.now()+'', updatedAt: Date.now()+''})
+    }
+
+    login = async(email, password)=>{
+        const loginUser = await this.userRepository.userFindEmail(email);
+        if( !loginUser || !(await bcript.compare(password, loginUser.get().password)) )
+        throw new Error('아이디 혹은 비밀번호가 일치하지 않습니다')
+
+        // 토큰 만들기
+        return jwt.sign({userId : loginUser.userId}, 'secret_dang', {expiresIn: '1h'})
+    }
+
+    dupCheckEmail = async (email)=>{
+        const result = await this.userRepository.userFindEmail(email);
+        return Boolean(result);
+    }
+
+    dupCheckNickname = async (nickname)=>{
+        const result = await this.userRepository.userFindNickname(nickname);
+        return Boolean(result);
+    }
 }
 
 module.exports = UserService;
