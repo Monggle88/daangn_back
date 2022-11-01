@@ -8,20 +8,17 @@ class MypageService {
   // getSaleslist 판매기록 조회
   async getSaleslist(req, res) {
     const { userId } = res.locals;
-    console.log(userId);
-    // const userId = 1; // 임시임시
+
     return await this.mypageRepository.getSaleslist(userId);
   }
   // getBuyslist 구매기록 조회
   async getBuyslist(req, res) {
-    // const { userId } = req.cookie.user;
-    const userId = 1; // 임시임시
+    const { userId } = res.locals;
     return await this.mypageRepository.getBuyslist(userId);
   }
   // getWishlist 찜 목록 조회
   async getWishlist(req, res) {
-    // const { userId } = req.cookie.user;
-    const userId = 1; // 임시임시
+    const { userId } = res.locals;
 
     const result = await this.mypageRepository.getWishlist(userId);
     return result;
@@ -29,8 +26,7 @@ class MypageService {
 
   // getMyHistory 당근 가계부
   async getMyHistory(req, res) {
-    // const { userId } = req.cookie.user;
-    const userId = 1; // 임시임시
+    const { userId } = res.locals;
 
     // 구매정산
     let buyPostIds = [];
@@ -75,15 +71,14 @@ class MypageService {
 
   // changeProfileImg 프로필 이미지 변경
   async changeProfileImg(req, res) {
-    const { userId } = req.cookie.user;
+    const { userId } = res.locals;
     await this.mypageRepository.changeProfileImg(userId);
     return result;
   }
 
   // changeNickname 닉네임 변경
   async changeNickname(req, res) {
-    // const { userId } = req.cookie.user;
-    const userId = 1; // 임시임시
+    const { userId } = res.locals;
     const { nickname } = req.body;
 
     // 유효성 검사
@@ -93,24 +88,20 @@ class MypageService {
 
   // changePassword 비밀번호 변경
   async changePassword(req, res) {
-    // const { userId } = req.cookie.user;
-    const userId = 1; // 임시임시
+    const { userId } = res.locals;
     const { password } = req.body;
-    console.log(password);
 
     const newPassword = await bcrypt.hash(
       password,
       Number(process.env.BCRYPT_SALT_ROUNDS)
     ); // 임시임시
-    console.log(newPassword);
 
     await this.mypageRepository.changePassword(userId, newPassword);
   }
 
   // getMypage 내 정보 조회
   async getMypage(req, res) {
-    // const { userId } = req.cookie.user;
-    const userId = 1; // 임시임시
+    const { userId } = res.locals;
     const result = await this.mypageRepository.getUserDetail(userId);
     return result;
   }
@@ -118,7 +109,7 @@ class MypageService {
   // getDetailByUserId 유저 정보 조회
   async getDetailByUserId(req, res) {
     const userId = req.params.userId;
-    console.log(userId);
+
     return await this.mypageRepository.getUserDetail(userId);
   }
 }

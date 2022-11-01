@@ -2,25 +2,26 @@ const express = require('express');
 const router = express.Router();
 
 const MypageController = require('./mypage.controller');
+const Auth = require('../middlewares/authMiddleware');
 const mypageController = new MypageController();
 
 // 내 판매기록 조회
-router.get('/sale', mypageController.getSaleslist);
+router.get('/sale', Auth, mypageController.getSaleslist);
 // 내 구매기록 조회
-router.get('/buy', mypageController.getBuyslist);
+router.get('/buy', Auth, mypageController.getBuyslist);
 // 내 찜 목록 조회
-router.get('/wish', mypageController.getWishlist);
+router.get('/wish', Auth, mypageController.getWishlist);
 // 당근 가계부
-router.get('/history', mypageController.getMyHistory);
+router.get('/history', Auth, mypageController.getMyHistory);
 // 프로필 이미지 변경
-router.put('/img', mypageController.changeProfileImg);
+router.put('/img', Auth, mypageController.changeProfileImg);
 // 닉네임 변경
-router.put('/nickname', mypageController.changeNickname);
+router.put('/nickname', Auth, mypageController.changeNickname);
 // 비밀번호 변경
-router.put('/password', mypageController.changePassword);
+router.put('/password', Auth, mypageController.changePassword);
 // 유저 정보 조회
-router.get('/:userId', mypageController.getDetailByUserId);
+router.get('/:userId', Auth, mypageController.getDetailByUserId);
 // 내 정보 조회
-router.get('', mypageController.getMypage);
+router.get('', Auth, mypageController.getMypage);
 
 module.exports = router;
