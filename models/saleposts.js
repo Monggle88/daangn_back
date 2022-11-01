@@ -10,18 +10,18 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
 
-      // this.hasMany(models.Wishes, {
-      //   as: 'Wishes',
-      //   foreignKey: 'postId',
-      // });
-      // this.hasMany(models.TransactionList, {
-      //   as: 'TransactionList',
-      //   foreignKey: 'postId',
-      // });
-      // this.hasMany(models.ChatList, {
-      //   as: 'ChatList',
-      //   foreignKey: 'postId',
-      // });
+      this.hasMany(models.Wishes, {
+        as: 'Wishes',
+        foreignKey: 'postId',
+      });
+      this.hasMany(models.TransactionList, {
+        as: 'TransactionList',
+        foreignKey: 'postId',
+      });
+      this.hasMany(models.ChatList, {
+        as: 'ChatList',
+        foreignKey: 'postId',
+      });
 
       this.belongsTo(models.Locations, {
         foreignKey: 'locationId',
