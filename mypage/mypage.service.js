@@ -7,18 +7,18 @@ class MypageService {
 
   // getSaleslist 판매기록 조회
   async getSaleslist(req, res) {
-    const { userId } = res.locals;
+    const { userId } = res.locals.user;
 
     return await this.mypageRepository.getSaleslist(userId);
   }
   // getBuyslist 구매기록 조회
   async getBuyslist(req, res) {
-    const { userId } = res.locals;
+    const { userId } = res.locals.user;
     return await this.mypageRepository.getBuyslist(userId);
   }
   // getWishlist 찜 목록 조회
   async getWishlist(req, res) {
-    const { userId } = res.locals;
+    const { userId } = res.locals.user;
 
     const result = await this.mypageRepository.getWishlist(userId);
     return result;
@@ -26,7 +26,7 @@ class MypageService {
 
   // getMyHistory 당근 가계부
   async getMyHistory(req, res) {
-    const { userId } = res.locals;
+    const { userId } = res.locals.user;
 
     // 구매정산
     let buyPostIds = [];
@@ -71,14 +71,14 @@ class MypageService {
 
   // changeProfileImg 프로필 이미지 변경
   async changeProfileImg(req, res) {
-    const { userId } = res.locals;
+    const { userId } = res.locals.user;
     await this.mypageRepository.changeProfileImg(userId);
     return result;
   }
 
   // changeNickname 닉네임 변경
   async changeNickname(req, res) {
-    const { userId } = res.locals;
+    const { userId } = res.locals.user;
     const { nickname } = req.body;
 
     // 유효성 검사
@@ -88,7 +88,7 @@ class MypageService {
 
   // changePassword 비밀번호 변경
   async changePassword(req, res) {
-    const { userId } = res.locals;
+    const { userId } = res.locals.user;
     const { password } = req.body;
 
     const newPassword = await bcrypt.hash(
@@ -101,7 +101,7 @@ class MypageService {
 
   // getMypage 내 정보 조회
   async getMypage(req, res) {
-    const { userId } = res.locals;
+    const { userId } = res.locals.user;
     const result = await this.mypageRepository.getUserDetail(userId);
     return result;
   }
