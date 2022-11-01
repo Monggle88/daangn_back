@@ -56,8 +56,7 @@ class PostController {
       const findOnePost = await this.postService.findOnePost(postId);
 
       const findPostByUser = await this.postService.findPostByUser(
-        userId,
-        postId
+        userId
       );
 
       res

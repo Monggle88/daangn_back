@@ -58,7 +58,7 @@ class PostService {
     if (!titlePost) throw new error('해당하는 타이틀의 거래글이 없습니다.');
 
     let result = [];
-    categoryPost.forEach((post) => {
+    titlePost.forEach((post) => {
       result.push(post)
     });
 
@@ -93,32 +93,18 @@ class PostService {
     let isWish = await this.postRepository.isWish(postId);
     isWish ? (isWish = true) : (isWish = false);
 
-    const findOnePostResult = findOnePost.map((post) => {
-      return {
-        postId: post.postId,
-        userId: post.userId,
-        categoryId: post.categoryId,
-        locationId: post.locationId,
-        title: post.title,
-        content: post.content,
-        postImgUrl: post.postImgUrl,
-        price: post.price,
-        status: post.status,
-        wishCount: post.wishCount,
-        chatCount: post.chatCount,
-        createdAt: post.createdAt,
-        updatedAt: post.updatedAt,
-      };
+    let result = [];
+    findOnePost.forEach((post) => {
+      result.push(post)
     });
 
-    const findPostByUser = await this.postRepository.findPostByUser(userId);
+    return isWish, result;
 
-    return findOnePostResult, isWish, findPostByUser;
   };
 
   // 유저의 다른 글 보기
-  findPostByUser = async (userId, postId) => {
-    await this.postRepository.findPostByUser(userId, postId);
+  findPostByUser = async (userId) => {
+    await this.postRepository.findPostByUser(userId);
   };
 
   // 거래글 생성

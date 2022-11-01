@@ -34,9 +34,9 @@ class PostRepository {
   };
 
   // 사용자별 거래글 조회
-  findPostByUser = async (userId, postId) => {
+  findPostByUser = async (userId) => {
     const otherPosts = await SalePosts.findAll({
-      attributes: [postId, title, price, postImgUrl],
+      attributes: ["postId", "title", "price", "postImgUrl"],
       where: { userId },
       order: [['updatedAt', 'DESC']],
       limit: 4,
