@@ -9,8 +9,6 @@ class MypageController {
       const result = await this.mypageService.getSaleslist(req, res);
       res.status(200).json({ data: result });
     } catch (error) {
-      console.log(error);
-      res.sendStatus(500);
       next(error);
     }
   };
