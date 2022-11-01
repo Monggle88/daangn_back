@@ -19,9 +19,15 @@ app.use(errorHandler);
 
 try {
   const option = {
-    ca: fs.readFileSync('/etc/letsencrypt/live/{myurl}/fullchain.pem'),
-    key: fs.readFileSync('/etc/letsencrypt/live/{myurl}/privkey.pem'),
-    cert: fs.readFileSync('/etc/letsencrypt/live/{myurl}/cert.pem'),
+    ca: fs.readFileSync(
+      '/etc/letsencrypt/live/{tonkotsu-ramen.site}/fullchain.pem'
+    ),
+    key: fs.readFileSync(
+      '/etc/letsencrypt/live/{tonkotsu-ramen.site}/privkey.pem'
+    ),
+    cert: fs.readFileSync(
+      '/etc/letsencrypt/live/{tonkotsu-ramen.site}/cert.pem'
+    ),
   };
 
   HTTPS.createServer(option, app).listen(port, () => {
