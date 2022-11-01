@@ -6,7 +6,7 @@ const Auth = require('../middlewares/authMiddleware');
 const mypageController = new MypageController();
 
 // 내 판매기록 조회
-router.get('/sale', mypageController.getSaleslist);
+router.get('/sale', Auth, mypageController.getSaleslist);
 // 내 구매기록 조회
 router.get('/buy', Auth, mypageController.getBuyslist);
 // 내 찜 목록 조회

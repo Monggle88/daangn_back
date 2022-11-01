@@ -4,7 +4,7 @@ const errorLogger = (error, request, response, next) => {
 };
 
 const errorHandler = (error, req, res, next) => {
-  const status = error.status || 400;
+  const status = error.status || 405;
   res.status(status);
   res.json({ ok: false, message: error.message });
 };
