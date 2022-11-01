@@ -10,12 +10,9 @@ class PostController {
       const { locationId } = req.params; // 임시
       const locationPost = await this.postService.findPostByLoc(locationId);
 
-      console.log('cont find location');
-
-      res.status(200).send(locationPost);
+      res.status(200).send({ data: locationPost });
     } catch (err) {
-      console.log(err);
-      return { errorMessage: err.message };
+      next(err);
     }
   };
 
@@ -28,23 +25,23 @@ class PostController {
 
       res.status(200).send(categoryPost);
     } catch (err) {
-      console.log(err);
-      return { errorMessage: err.message };
+      next(err);
     }
   };
 
-  // 제목검색 거래글 조회 검색기능 왜 안될까?
+  // 제목검색 거래글 조회 검색기능 왜 잘될까?
   findPostByTitle = async (req, res, next) => {
     try {
-      const { title } = req.body;
+      let { keyword } = req.query;
+      keyword = keyword.trim();
 
-      const titlePost = await this.postService.findPostByTitle(title);
+      if (keyword < 1) throw new Error('키워드를 두 글자 이상 입력해주세요');
 
-      console.log('controller findtitle');
+      const titlePost = await this.postService.findPostByTitle(keyword);
+
       res.status(200).send(titlePost);
     } catch (err) {
-      console.log(err);
-      return { errorMessage: err.message };
+      next(err);
     }
   };
 
@@ -62,36 +59,18 @@ class PostController {
       console.log('controller detail');
       return res.status(200).send(findOnePost);
     } catch (err) {
-      console.log(err);
-      return { errorMessage: err.message };
+      next(err);
     }
   };
 
   // 거래글 생성
   createPost = async (req, res, next) => {
     try {
-      const { categoryId, title, content, postImgUrl, price } = req.body;
+      await this.postService.createPost(req, res);
 
-      // const { userId, locationId } = res.locals.user;
-      const userId = 1; // 임시
-      const locationId = 1; // 임시
-
-      const createPost = await this.postService.createPost({
-        userId,
-        categoryId,
-        locationId,
-        title,
-        content,
-        postImgUrl,
-        price,
-        createdAt: Date.now() + '',
-        updatedAt: Date.now() + '',
-      });
-
-      return res.status(201).send(createPost);
+      res.status(200).send({ ok: 'true', message: '거래글이 생성되었습니다.' });
     } catch (err) {
-      console.log(err);
-      return { errorMessage: err.message };
+      next(err);
     }
   };
 
@@ -127,8 +106,7 @@ class PostController {
         return res.status(200).send(updatePost);
       }
     } catch (err) {
-      console.log(err);
-      return { errorMessage: err.message };
+      next(err);
     }
   };
 
@@ -150,8 +128,7 @@ class PostController {
 
       return res.status(200).send(updateStatus);
     } catch (err) {
-      console.log(err);
-      return { errorMessage: err.message };
+      next(err);
     }
   };
 
@@ -167,24 +144,9 @@ class PostController {
 
       return res.status(200).send({ data: deletePost });
     } catch (err) {
-      console.log(err);
-      return { errorMessage: err.message };
+      next(err);
     }
   };
-
-  // // 찜목록 구현 안함
-  // wishList = async (req, res, next) => {
-  //   try {
-  //     const { userId } = res.locals.user;
-
-  //     const wishList = await this.postService.wishList(userId);
-
-  //     return res.status(200).send(wishList);
-  //   } catch (err) {
-  //     console.log(err);
-  //     return { errorMessage: err.message };
-  //   }
-  // };
 
   // 찜 update
   updateWish = async (req, res, next) => {
@@ -196,8 +158,7 @@ class PostController {
 
       return res.status(200).json({ data: updateWish });
     } catch (err) {
-      console.log(err);
-      return { errorMessage: err.message };
+      next(err);
     }
   };
 }

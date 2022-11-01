@@ -5,34 +5,18 @@ class PostService {
 
   // 위치별 거래글 조회
   findPostByLoc = async (locationId) => {
-    try {
-      const locationPost = await this.postRepository.findPostByLoc(locationId);
-      if (!locationPost) throw new error('해당 지역에는 거래글이 없습니다.');
+    const locationPost = await this.postRepository.findPostByLoc(locationId);
+    if (locationPost.length < 1)
+      throw new Error('해당 지역에는 거래글이 없습니다.');
 
-      const allLocationPost = locationPost.map((post) => {
-        return {
-          postId: post.postId,
-          userId: post.userId,
-          categoryId: post.categoryId,
-          locationId: post.locationId,
-          title: post.title,
-          content: post.content,
-          postImgUrl: post.postImgUrl,
-          price: post.price,
-          status: post.status,
-          wishCount: post.wishCount,
-          chatCount: post.chatCount,
-          createdAt: post.createdAt,
-          updatedAt: post.updatedAt,
-        };
-      });
-      console.log('serv post by loc');
+    let result = [];
+    locationPost.forEach((post) => {
+      if (post.status < 2) {
+        result.push(post);
+      }
+    });
 
-      return allLocationPost;
-    } catch (err) {
-      console.log(err);
-      return { errorMessage: err.message };
-    }
+    return result;
   };
 
   // 카테고리별 거래글 조회
@@ -91,7 +75,6 @@ class PostService {
           updatedAt: post.updatedAt,
         };
       });
-      console.log('serv post by title');
 
       return allTitlePost;
     } catch (err) {
@@ -139,27 +122,24 @@ class PostService {
   };
 
   // 거래글 생성
-  createPost = async (categoryId, title, content, postImgUrl, price) => {
-    try {
-      const createPost = await this.postRepository.createPost({
-        userId,
-        categoryId,
-        locationId,
-        title,
-        content,
-        postImgUrl,
-        price,
-        createdAt,
-        updatedAt,
-      });
+  createPost = async (req, res) => {
+    const { categoryId, title, content, postImgUrl, price } = req.body;
 
-      console.log('serv create');
+    // const { userId, locationId } = res.locals.user;
+    const userId = 1; // 임시
+    const locationId = 1; // 임시
 
-      return createPost;
-    } catch (err) {
-      console.log(err);
-      return { errorMessage: err.message };
-    }
+    const post = {
+      userId,
+      categoryId,
+      locationId,
+      title,
+      content,
+      postImgUrl,
+      price,
+    };
+
+    await this.postRepository.createPost(post);
   };
 
   //거래글 수정

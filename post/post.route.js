@@ -3,6 +3,11 @@ const router = express.Router();
 
 const PostController = require('./post.controller');
 const postController = new PostController();
+
+// 불필요한 trycatch, console.log 삭제
+// 위치별, 카테고리별 stauts가 2인 게시글 버리기
+// 코드 정리
+
 // 위치별 조회 ㅇ
 router.get('/loc/:locationId', postController.findPostByLoc);
 // 카테고리별 조회 ㅇ

@@ -8,9 +8,8 @@ class PostRepository {
   findPostByLoc = async (locationId) => {
     const locationPost = await SalePosts.findAll({
       where: { locationId },
-      order: [['createdAt', 'DESC']],
+      order: [['updatedAt', 'DESC']],
     });
-    console.log('repo find by location', locationPost);
 
     return locationPost;
   };
@@ -29,10 +28,9 @@ class PostRepository {
   // 제목검색 거래글 조회
   findPostByTitle = async (title) => {
     const titlePost = await SalePosts.findAll({
-      where: { title: { [Op.like]: `%` + title + `%` } },
+      where: { title: { [Op.like]: `%${title}%` } },
       order: [['createdAt', 'DESC']],
     });
-    console.log('repo find by title', titlePost);
 
     return titlePost;
   };
@@ -61,20 +59,12 @@ class PostRepository {
   };
 
   // 거래글 생성
-  createPost = async (categoryId, title, content, postImgUrl, price) => {
+  createPost = async (post) => {
     const createPost = await SalePosts.create({
-      userId,
-      categoryId,
-      locationId,
-      title,
-      content,
-      postImgUrl,
-      price,
-      createdAt,
-      updatedAt,
+      ...post,
+      createdAt: String(Date.now()),
+      updatedAt: String(Date.now()),
     });
-
-    console.log('repo create', createPost);
 
     return createPost;
   };

@@ -92,10 +92,12 @@ module.exports = (sequelize, DataTypes) => {
       wishCount: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        defaultValue: 0,
       },
       chatCount: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        defaultValue: 0,
       },
       createdAt: {
         type: DataTypes.STRING,
