@@ -31,7 +31,7 @@ class UserController {
     // if(!loginUser){
     //     return res.status(400).json({ ok: false, errorMessage:"이메일 혹은 비밀번호를 확인해 주세요" })
     // }  service에서 했음 프론트랑 얘기해 보고 수정
-    res.header('Authorization', loginUser);
+    res.headers('Authorization', loginUser);
     // res cookie
     res.cookie('token', loginUser);
     res.cookie('Authorization', loginUser, { Expires: 3600 });
