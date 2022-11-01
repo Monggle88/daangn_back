@@ -3,10 +3,7 @@ const { Users } = require('../models');
 
 module.exports = async (req, res, next) => {
   try {
-    const cookie = req.headers.Authorization || req.cookies.Authorization;
-
-    console.log(req.headers.Authorization);
-    console.log(req.cookies.Authorization);
+    const cookie = req.headers.authorization || req.cookies.Authorization;
 
     if (!cookie) {
       return res
