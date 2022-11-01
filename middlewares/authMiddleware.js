@@ -12,11 +12,12 @@ module.exports = async (req, res, next) => {
     }
 
     const { userId } = jwt.verify(cookie, 'secret_dang'); // 궁금
-    console.log(userId);
+
     const user = await Users.findOne({
-      attributes: ['email', 'password'],
+      attributes: { exclude: ['email', 'password'] },
       where: { userId },
     });
+
     res.locals.user = user;
 
     next();
