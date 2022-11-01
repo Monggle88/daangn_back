@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const fs = require('fs');
 const HTTPS = require('https');
 const port = process.env.PORT;
@@ -11,6 +12,7 @@ const {
 } = require('./middlewares/error-hander.middleware');
 const routes = require('./index');
 
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 app.use('/', routes);
