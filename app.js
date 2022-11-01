@@ -12,7 +12,7 @@ const {
 } = require('./middlewares/error-hander.middleware');
 const routes = require('./index');
 
-app.use(cors());
+app.use(cors({ origin: '*', credential: 'true' }));
 app.use(express.json());
 app.use(cookieParser());
 app.use('/', routes);

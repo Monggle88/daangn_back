@@ -7,8 +7,9 @@ class MypageService {
 
   // getSaleslist 판매기록 조회
   async getSaleslist(req, res) {
-    // const { userId } = req.cookie.user;
-    const userId = 1; // 임시임시
+    const { userId } = res.locals;
+    console.log(userId);
+    // const userId = 1; // 임시임시
     return await this.mypageRepository.getSaleslist(userId);
   }
   // getBuyslist 구매기록 조회
