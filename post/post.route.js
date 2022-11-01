@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
+const Auth = require('../middlewares/authMiddleware');
 const PostController = require('./post.controller');
 const postController = new PostController();
 
@@ -9,7 +10,7 @@ const postController = new PostController();
 // 코드 정리
 
 // 위치별 조회 ㅇ
-router.get('/loc/:locationId', postController.findPostByLoc);
+router.get('/loc/:locationId', Auth, postController.findPostByLoc);
 // 카테고리별 조회 ㅇ
 router.get('/cat/:categoryId', postController.findPostByCat);
 // 타이틀 검색
