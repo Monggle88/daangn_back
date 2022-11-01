@@ -3,7 +3,7 @@ const { Users } = require('../models');
 
 module.exports = async (req, res, next) => {
   try {
-    const cookie = req.headers.authorization || req.cookies.authorization;
+    const cookie = req.headers.Authorization || req.cookies.Authorization;
 
     if (!cookie) {
       return res
@@ -12,7 +12,8 @@ module.exports = async (req, res, next) => {
     }
 
     const { userId } = jwt.verify(cookie, 'secret_dang'); // 궁금
-    const user = await Users.findByPk({
+    console.log(userId);
+    const user = await Users.findOne({
       attributes: ['email', 'password'],
       where: { userId },
     });
