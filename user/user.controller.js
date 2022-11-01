@@ -33,7 +33,7 @@ class UserController {
     // }  service에서 했음 프론트랑 얘기해 보고 수정
     res.header('Authorization', loginUser);
     res.cookie('Authorization', loginUser, { Expires: 3600 });
-    res.send({ token: loginUser });
+    // res.send({ token: loginUser });
   };
 
   emailDup = async (req, res, next) => {
