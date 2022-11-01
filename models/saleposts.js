@@ -10,18 +10,18 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
 
-      // this.hasMany(models.Wishes, {
-      //   as: 'Wishes',
-      //   foreignKey: 'postId',
-      // });
-      // this.hasMany(models.TransactionList, {
-      //   as: 'TransactionList',
-      //   foreignKey: 'postId',
-      // });
-      // this.hasMany(models.ChatList, {
-      //   as: 'ChatList',
-      //   foreignKey: 'postId',
-      // });
+      this.hasMany(models.Wishes, {
+        as: 'Wishes',
+        foreignKey: 'postId',
+      });
+      this.hasMany(models.TransactionList, {
+        as: 'TransactionList',
+        foreignKey: 'postId',
+      });
+      this.hasMany(models.ChatList, {
+        as: 'ChatList',
+        foreignKey: 'postId',
+      });
 
       this.belongsTo(models.Locations, {
         foreignKey: 'locationId',
@@ -51,6 +51,14 @@ module.exports = (sequelize, DataTypes) => {
           model: 'Users',
           key: 'userId',
         },
+      },
+      nickname: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      profileImage: {
+        type: DataTypes.STRING(500),
+        allowNull: false,
       },
       categoryId: {
         type: DataTypes.INTEGER,
@@ -92,10 +100,12 @@ module.exports = (sequelize, DataTypes) => {
       wishCount: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        defaultValue: 0,
       },
       chatCount: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        defaultValue: 0,
       },
       createdAt: {
         type: DataTypes.STRING,

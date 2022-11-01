@@ -3,15 +3,20 @@ const router = express.Router();
 
 const PostController = require('./post.controller');
 const postController = new PostController();
+
+// 불필요한 trycatch, console.log 삭제
+// 위치별, 카테고리별 stauts가 2인 게시글 버리기
+// 코드 정리
+
 // 위치별 조회 ㅇ
-router.get('/loc/:locationId', postController.findPostByLoc);
+router.get('/loc', postController.findPostByLoc);
 // 카테고리별 조회 ㅇ
 router.get('/cat/:categoryId', postController.findPostByCat);
-// 타이틀 검색
+// 타이틀 검색 ㅇ
 router.get('/search', postController.findPostByTitle);
-// 상세 조회
+// 상세 조회 ㅇ
 router.get('/:postId', postController.findOnePost);
-// 거래글 생성
+// 거래글 생성 ㅇ
 router.post('/', postController.createPost);
 // 거래글 수정 ㅇ
 router.put('/:postId', postController.updatePost);

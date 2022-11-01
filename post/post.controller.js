@@ -6,16 +6,13 @@ class PostController {
   // 위치별 거래글 조회
   findPostByLoc = async (req, res, next) => {
     try {
-      // const { locationId } = res.locals.user; // user랑 합치면 이걸로 돌려놔야함
-      const { locationId } = req.params; // 임시
+      const { locationId } = res.locals.user; // user랑 합치면 이걸로 돌려놔야함
+      // const { locationId } = req.params; // 임시
       const locationPost = await this.postService.findPostByLoc(locationId);
 
-      console.log('cont find location');
-
-      res.status(200).send(locationPost);
+      res.status(200).send({ data: locationPost });
     } catch (err) {
-      console.log(err);
-      return { errorMessage: err.message };
+      next(err);
     }
   };
 
@@ -26,25 +23,26 @@ class PostController {
 
       const categoryPost = await this.postService.findPostByCat(categoryId);
 
-      res.status(200).send(categoryPost);
+      res.status(200).send({ data: categoryPost });
     } catch (err) {
-      console.log(err);
-      return { errorMessage: err.message };
+      next(err);
     }
   };
 
-  // 제목검색 거래글 조회 검색기능 왜 안될까?
+  // 제목검색 거래글 조회 검색기능 왜 잘될까?
   findPostByTitle = async (req, res, next) => {
     try {
-      const { title } = req.body;
+      let { keyword } = req.query;
 
-      const titlePost = await this.postService.findPostByTitle(title);
+      keyword = keyword.trim();
 
-      console.log('controller findtitle');
-      res.status(200).send(titlePost);
+      if (keyword < 1) throw new Error('키워드를 두 글자 이상 입력해주세요');
+
+      const titlePost = await this.postService.findPostByTitle(keyword);
+
+      res.status(200).send({ data: titlePost });
     } catch (err) {
-      console.log(err);
-      return { errorMessage: err.message };
+      next(err);
     }
   };
 
@@ -57,134 +55,62 @@ class PostController {
 
       const findOnePost = await this.postService.findOnePost(postId);
 
-      // let isWish = await this.postService.isWish(postId);
+      const findPostByUser = await this.postService.findPostByUser(
+        userId,
+        postId
+      );
 
-      console.log('controller detail');
-      return res.status(200).send(findOnePost);
+      res
+        .status(200)
+        .send({ data: findOnePost }, { otherPosts: findPostByUser });
     } catch (err) {
-      console.log(err);
-      return { errorMessage: err.message };
+      next(err);
     }
   };
 
   // 거래글 생성
   createPost = async (req, res, next) => {
     try {
-      const { categoryId, title, content, postImgUrl, price } = req.body;
+      await this.postService.createPost(req, res);
 
-      // const { userId, locationId } = res.locals.user;
-      const userId = 1; // 임시
-      const locationId = 1; // 임시
-
-      const createPost = await this.postService.createPost({
-        userId,
-        categoryId,
-        locationId,
-        title,
-        content,
-        postImgUrl,
-        price,
-        createdAt: Date.now() + '',
-        updatedAt: Date.now() + '',
-      });
-
-      return res.status(201).send(createPost);
+      res.status(200).send({ ok: 'true', message: '거래글이 생성되었습니다.' });
     } catch (err) {
-      console.log(err);
-      return { errorMessage: err.message };
+      next(err);
     }
   };
 
   // 거래글 수정
   updatePost = async (req, res, next) => {
     try {
-      // const { userId, locationId } = res.locals.user;
-      const userId = 1; // 임시
-      const locationId = 1; // 임시
+      await this.postService.updatePost(req, res);
 
-      const { postId } = req.params;
-
-      const { categoryId, title, content, postImgUrl, price } = req.body;
-
-      // title 없을 때
-      if (!title) res.status(400).send({ message: '제목을 입력해주세요.' });
-      // title 공백으로 시작할 때
-      else if (/^[\s]+/.test(title))
-        res
-          .status(400)
-          .send({ message: '제목은 공백으로 시작할 수 없습니다.' });
-      else if (title) {
-        const updatePost = await this.postService.updatePost(
-          postId,
-          userId,
-          categoryId,
-          locationId,
-          title,
-          content,
-          postImgUrl,
-          price
-        );
-        return res.status(200).send(updatePost);
-      }
+      res.status(200).send({ ok: 'true', message: '거래글이 수정되었습니다.' });
     } catch (err) {
-      console.log(err);
-      return { errorMessage: err.message };
+      next(err);
     }
   };
 
   // 거래글 status 수정
   updateStatus = async (req, res, next) => {
     try {
-      // const { userId } = res.locals.user;
-      const userId = 1; // 임시
+      await this.postService.udpateStatus(req, res);
 
-      const { postId } = req.params;
-
-      const { status } = req.body;
-
-      const updateStatus = await this.postService.updateStatus(
-        postId,
-        userId,
-        status
-      );
-
-      return res.status(200).send(updateStatus);
+      res.status(200).send({ ok: 'true', message: '상태가 변경되었습니다.' });
     } catch (err) {
-      console.log(err);
-      return { errorMessage: err.message };
+      next(err);
     }
   };
 
   // 거래글 삭제
   deletePost = async (req, res, next) => {
     try {
-      // const { userId } = res.locals.user;
-      const userId = 1; // 임시
+      await this.postService.deletePost(req, res);
 
-      const { postId } = req.params;
-
-      const deletePost = await this.postService.deletePost(userId, postId);
-
-      return res.status(200).send({ data: deletePost });
+      res.status(200).send({ ok: 'true', message: '거래글이 삭제되었습니다.' });
     } catch (err) {
-      console.log(err);
-      return { errorMessage: err.message };
+      next(err);
     }
   };
-
-  // // 찜목록 구현 안함
-  // wishList = async (req, res, next) => {
-  //   try {
-  //     const { userId } = res.locals.user;
-
-  //     const wishList = await this.postService.wishList(userId);
-
-  //     return res.status(200).send(wishList);
-  //   } catch (err) {
-  //     console.log(err);
-  //     return { errorMessage: err.message };
-  //   }
-  // };
 
   // 찜 update
   updateWish = async (req, res, next) => {
@@ -196,8 +122,7 @@ class PostController {
 
       return res.status(200).json({ data: updateWish });
     } catch (err) {
-      console.log(err);
-      return { errorMessage: err.message };
+      next(err);
     }
   };
 }
