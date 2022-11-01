@@ -20,14 +20,12 @@ app.use(errorHandler);
 try {
   const option = {
     ca: fs.readFileSync(
-      '/etc/letsencrypt/live/{tonkotsu-ramen.site}/fullchain.pem'
+      '/etc/letsencrypt/live/tonkotsu-ramen.site/fullchain.pem'
     ),
     key: fs.readFileSync(
-      '/etc/letsencrypt/live/{tonkotsu-ramen.site}/privkey.pem'
+      '/etc/letsencrypt/live/tonkotsu-ramen.site/privkey.pem'
     ),
-    cert: fs.readFileSync(
-      '/etc/letsencrypt/live/{tonkotsu-ramen.site}/cert.pem'
-    ),
+    cert: fs.readFileSync('/etc/letsencrypt/live/tonkotsu-ramen.site/cert.pem'),
   };
 
   HTTPS.createServer(option, app).listen(port, () => {
