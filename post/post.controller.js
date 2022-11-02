@@ -6,8 +6,8 @@ class PostController {
   // 위치별 거래글 조회
   findPostByLoc = async (req, res, next) => {
     try {
-      const { locationId } = res.locals.user; // user랑 합치면 이걸로 돌려놔야함
-      // const { locationId } = req.params; // 임시
+      const { locationId } = res.locals.user; 
+
       const locationPost = await this.postService.findPostByLoc(locationId);
 
       res.status(200).send({ data: locationPost });
@@ -55,13 +55,9 @@ class PostController {
 
       const findOnePost = await this.postService.findOnePost(postId);
 
-      const findPostByUser = await this.postService.findPostByUser(
-        userId
-      );
+      const findPostByUser = await this.postService.findPostByUser(userId);
 
-      res
-        .status(200)
-        .send({ data: findOnePost }, { otherPosts: findPostByUser });
+      res.status(200).send({ data: findOnePost }, { otherPosts: findPostByUser });
     } catch (err) {
       next(err);
     }
@@ -119,7 +115,7 @@ class PostController {
 
       const updateWish = await this.postService.updateWish(userId, postId);
 
-      return res.status(200).json({ data: updateWish });
+      res.status(200).json({ data: updateWish });
     } catch (err) {
       next(err);
     }
