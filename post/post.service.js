@@ -27,7 +27,7 @@ class PostService {
 
     let result = [];
     categoryPost.forEach((post) => {
-      result.push(post);;
+      result.push(post);
     });
 
     return result;
@@ -40,7 +40,7 @@ class PostService {
 
     let result = [];
     titlePost.forEach((post) => {
-      result.push(post);;
+      result.push(post);
     });
 
     return result;
@@ -51,18 +51,18 @@ class PostService {
     const findOnePost = await this.postRepository.findOnePost(postId);
     if (!findOnePost) throw new error('존재하지 않는 거래글입니다. servDetail');
     console.log('serv findOnePost', findOnePost);
-    
-    return isWish, findOnePost;
+
+    return findOnePost;
   };
 
-// 찜 여부 확인
-isWish = async(postId) => {
-  let isWish = await this.postRepository.isWish(postId);
+  // 찜 여부 확인
+  isWish = async (postId) => {
+    let isWish = await this.postRepository.isWish(postId);
 
-  isWish ? (isWish = true) : (isWish = false);
-  
-  return isWish;
-}
+    isWish ? (isWish = true) : (isWish = false);
+
+    return isWish;
+  };
 
   // 유저의 다른 글 보기
   findPostByUser = async (userId, postId) => {
@@ -155,8 +155,11 @@ isWish = async(postId) => {
     if (!findOnePost) throw new error('존재하지 않는 게시글입니다.');
     if (findOnePost.userId !== userId) throw new error('수정 권한이 없습니다.');
 
-    if ( status === 2) { await this.postRepository.createTransaction(postId, userId)}
-    else { await this.postRepository.updateStatus(post); }
+    if (status === 2) {
+      await this.postRepository.createTransaction(postId, userId);
+    } else {
+      await this.postRepository.updateStatus(post);
+    }
   };
 
   // 거래글 삭제
@@ -179,7 +182,6 @@ isWish = async(postId) => {
   //찜 update(추가삭제 동시)
   updateWish = async (userId, postId) => {
     const findWish = await this.postRepository.findWish(userId, postId);
-
 
     if (!findWish) {
       await this.postRepository.createWish(userId, postId);
