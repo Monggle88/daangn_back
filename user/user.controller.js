@@ -1,6 +1,6 @@
 const UserService = require('./user.service');
 const jwt = require('jsonwebtoken');
-const { signupSchema, loginSchema } = require('../util/validation');
+const { signupSchema, loginSchema, emailDupSchema, nicknameDupSchema } = require('../util/validation');
 
 class UserController {
   userService = new UserService();
@@ -53,7 +53,7 @@ class UserController {
 
   emailDup = async (req, res, next) => {
     try {
-      const { email } = req.body;
+      const { email } = await emailDupSchema.validateAsync(req.body);
       if (email == '') throw new Error('이메일을 입력해 주세요');
       const emailDup = await this.userService.dupCheckEmail(email);
       if (emailDup) {
@@ -74,20 +74,24 @@ class UserController {
   };
 
   nicknameDup = async (req, res, next) => {
-    const { nickname } = req.body;
-    if (nickname == '') throw new Error('닉네임을 입력해 주세요');
-    const nicknameDup = await this.userService.dupCheckNickname(nickname);
-    if (nicknameDup) {
-      return res.status(400).json({
-        ok: false,
-        errorMessage: '닉네임이 이미 존재합니다',
-      });
-    } else {
-      await this.userService.dupCheckNickname(nickname);
-      return res.status(200).json({
-        ok: true,
-        message: '사용 가능한 닉네임입니다',
-      });
+    try{
+      const { nickname } = await nicknameDupSchema.validateAsync(req.body);
+      if (nickname == '') throw new Error('닉네임을 입력해 주세요');
+      const nicknameDup = await this.userService.dupCheckNickname(nickname);
+      if (nicknameDup) {
+        return res.status(400).json({
+          ok: false,
+          errorMessage: '닉네임이 이미 존재합니다',
+        });
+      } else {
+        await this.userService.dupCheckNickname(nickname);
+        return res.status(200).json({
+          ok: true,
+          message: '사용 가능한 닉네임입니다',
+        });
+      }
+    }catch(error){
+      next(error)
     }
   };
 }
