@@ -41,8 +41,7 @@ class UserService {
       },
       process.env.JWT_SECRET_KEY,
       {
-        // expiresIn: '1h',
-        expiresIn: '100s',
+        expiresIn: '1h',
       }
     );
   };

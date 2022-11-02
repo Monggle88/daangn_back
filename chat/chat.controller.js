@@ -34,7 +34,7 @@ class ChatsController {
         );
         CLID = createChattingRoomData.dataValues.chatListId;
       }
-      res.status(201).send({ data: '채팅룸 아이디: ' + CLID });
+      res.status(201).send({ data: CLID });
       return CLID;
     } catch (error) {
       return res.status(500).send({ errorMessage: error.message });
@@ -78,6 +78,12 @@ class ChatsController {
         where: { chatlistId: chatListId },
       }); //채팅데이터
 
+      chatData.forEach((chat) => {
+        let isMine = false;
+        if (userId === chat.dataValues.userId) isMine = true;
+        Object.assign(chat.dataValues, { isMine: isMine });
+      });
+
       const data = {
         chatListId: chatListId,
         title: postInfoData.title,
@@ -116,7 +122,7 @@ class ChatsController {
         return;
       }
       //################################################################
-      const { userId } = req.app.locals.user; //로그인중인 유저의 정보를 가져온다.
+      const { userId } = res.locals.user; //로그인중인 유저의 정보를 가져온다.
       //################################################################
 
       const chatsRoom = await this.chatsService.findRoom(chatListId); //채팅을 추가할 채팅리스트를 찾는다.
@@ -126,6 +132,8 @@ class ChatsController {
         userId,
         cLId
       );
+
+      await this.chatsService.updateLastChat(chatListId, message);
       res.status(201).send({ data: createChatData });
     } catch (error) {
       return res.status(500).send({ errorMessage: error.message });

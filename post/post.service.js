@@ -100,7 +100,7 @@ class PostService {
       price,
     };
 
-    await this.postRepository.createPost(post);
+    return await this.postRepository.createPost(post);
   };
 
   //거래글 수정

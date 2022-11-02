@@ -77,9 +77,15 @@ class PostController {
   // 거래글 생성
   createPost = async (req, res, next) => {
     try {
-      await this.postService.createPost(req, res);
+      const post = await this.postService.createPost(req, res);
 
-      res.status(200).send({ ok: true, message: '거래글이 생성되었습니다.' });
+      res
+        .status(200)
+        .send({
+          ok: true,
+          message: '거래글이 생성되었습니다.',
+          postId: post.postId,
+        });
     } catch (err) {
       next(err);
     }

@@ -52,6 +52,17 @@ class ChatsRepository {
     const chatList = await ChatList.findByPk(chatListId);
     return chatList;
   };
+
+  // 마지막 채팅 업데이트
+  updateLastChat = async (chatListId, lastMessage) => {
+    await ChatList.update(
+      {
+        lastMessage,
+        updatedAt: String(Date.now()),
+      },
+      { where: { chatListId } }
+    );
+  };
 }
 
 module.exports = ChatsRepository;
