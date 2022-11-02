@@ -27,7 +27,7 @@ class PostService {
 
     let result = [];
     categoryPost.forEach((post) => {
-      result.push(post);
+      result.push(post);;
     });
 
     return result;
@@ -40,7 +40,7 @@ class PostService {
 
     let result = [];
     titlePost.forEach((post) => {
-      result.push(post);
+      result.push(post);;
     });
 
     return result;
@@ -134,7 +134,7 @@ isWish = async(postId) => {
     if (!findOnePost) throw new error('존재하지 않는 게시글입니다.');
     if (findOnePost.userId !== userId) throw new error('수정 권한이 없습니다.');
 
-    await this.postRepository.updatePost(postId, post);
+    await this.postRepository.updatePost(postId, postId, post);
   };
 
   // 거래글 status 수정
@@ -179,6 +179,7 @@ isWish = async(postId) => {
   //찜 update(추가삭제 동시)
   updateWish = async (userId, postId) => {
     const findWish = await this.postRepository.findWish(userId, postId);
+
 
     if (!findWish) {
       await this.postRepository.createWish(userId, postId);

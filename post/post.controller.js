@@ -6,12 +6,12 @@ class PostController {
   // 위치별 거래글 조회
   findPostByLoc = async (req, res, next) => {
     try {
-      // const { locationId } = res.locals.user;
-      const locationId = 1;
+      const { locationId } = res.locals.user;
 
       const locationPost = await this.postService.findPostByLoc(locationId);
 
       res.status(200).json({ data: locationPost });
+      // res.status(200).json({ data: locationPost });
       // res.status(200).send({ data: locationPost });
     } catch (err) {
       next(err);
