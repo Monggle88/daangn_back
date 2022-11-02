@@ -121,6 +121,8 @@ class MypageService {
     const { userId } = res.locals.user;
     const { locationId } = req.body;
 
+    console.log(locationId);
+
     await this.mypageRepository.changeLocationId(userId, locationId);
   }
 
