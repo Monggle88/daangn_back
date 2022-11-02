@@ -31,7 +31,7 @@ class PostController {
     }
   };
 
-  // 제목검색 거래글 조회 검색기능 왜 잘될까?
+  // 제목검색 거래글 조회 검색기능
   findPostByTitle = async (req, res, next) => {
     try {
       let { keyword } = req.query;
@@ -68,7 +68,9 @@ class PostController {
       // res.status(200).send({ data: findOnePost, otherPosts: otherPosts });
       res
         .status(200)
-        .send({ data: { post: findOnePost, isWish: isWish, otherPosts: otherPosts } });
+        .send({
+          data: { post: findOnePost, isWish: isWish, otherPosts: otherPosts },
+        });
     } catch (err) {
       next(err);
     }
