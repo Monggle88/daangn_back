@@ -1,7 +1,6 @@
 const { SalePosts, Wishes, TransactionList } = require('../models');
 const { Op } = require('sequelize');
 
-
 class PostRepository {
   // 위치별 거래글 조회
   findPostByLoc = async (locationId) => {
@@ -36,7 +35,7 @@ class PostRepository {
   // 사용자별 거래글 조회
   findPostByUser = async (userId) => {
     const otherPosts = await SalePosts.findAll({
-      attributes: ["postId", "title", "price", "postImgUrl"],
+      attributes: ['postId', 'title', 'price', 'postImgUrl'],
       where: { userId },
       order: [['updatedAt', 'DESC']],
       limit: 4,

@@ -27,7 +27,7 @@ class PostService {
 
     let result = [];
     categoryPost.forEach((post) => {
-      result.push(post)
+      result.push(post);
     });
 
     return result;
@@ -59,7 +59,7 @@ class PostService {
 
     let result = [];
     titlePost.forEach((post) => {
-      result.push(post)
+      result.push(post);
     });
 
     return result;
@@ -95,11 +95,10 @@ class PostService {
 
     let result = [];
     findOnePost.forEach((post) => {
-      result.push(post)
+      result.push(post);
     });
 
     return isWish, result;
-
   };
 
   // 유저의 다른 글 보기

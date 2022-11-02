@@ -72,7 +72,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       profileImage: {
         type: DataTypes.STRING(500),
-        allowNull: false,
+        allowNull: true,
       },
       createdAt: DataTypes.STRING(40),
       updatedAt: DataTypes.STRING(40),
