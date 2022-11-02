@@ -6,11 +6,13 @@ class PostController {
   // 위치별 거래글 조회
   findPostByLoc = async (req, res, next) => {
     try {
-      const { locationId } = res.locals.user; 
+      // const { locationId } = res.locals.user;
+      const locationId = 1;
 
       const locationPost = await this.postService.findPostByLoc(locationId);
 
-      res.status(200).send({ data: locationPost });
+      res.status(200).json({ data: locationPost });
+      // res.status(200).send({ data: locationPost });
     } catch (err) {
       next(err);
     }
@@ -57,7 +59,9 @@ class PostController {
 
       const findPostByUser = await this.postService.findPostByUser(userId);
 
-      res.status(200).send({ data: findOnePost }, { otherPosts: findPostByUser });
+      res
+        .status(200)
+        .send({ data: findOnePost }, { otherPosts: findPostByUser });
     } catch (err) {
       next(err);
     }
@@ -88,7 +92,7 @@ class PostController {
   // 거래글 status 수정
   updateStatus = async (req, res, next) => {
     try {
-      await this.postService.udpateStatus(req, res);
+      await this.postService.updateStatus(req, res);
 
       res.status(200).send({ ok: 'true', message: '상태가 변경되었습니다.' });
     } catch (err) {

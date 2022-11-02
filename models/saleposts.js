@@ -94,7 +94,6 @@ module.exports = (sequelize, DataTypes) => {
       },
       status: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         defaultValue: 0,
       },
       wishCount: {

@@ -120,7 +120,7 @@ class PostService {
     if (!findOnePost) throw new error('존재하지 않는 게시글입니다.');
     if (findOnePost.userId !== userId) throw new error('수정 권한이 없습니다.');
 
-    await this.postRepository.updatePost(post);
+    await this.postRepository.updatePost(postId, post);
   };
 
   // 거래글 status 수정
@@ -164,13 +164,14 @@ class PostService {
   //찜 update(추가삭제 동시)
   updateWish = async (userId, postId) => {
     const findWish = await this.postRepository.findWish(userId, postId);
+
     if (!findWish) {
-      await this.postRepository.createWish({ userId: userId, postId: postId });
-      await this.postRepository.increment({ userId: userId });
+      await this.postRepository.createWish(userId, postId);
+      await this.postRepository.increment(postId);
       return { message: '찜목록에 추가하였습니다.' };
     } else {
-      await this.postRepository.deleteWish({ userId: userId, postId: postId });
-      await this.postRepository.decrement({ userId: userId });
+      await this.postRepository.deleteWish(userId, postId);
+      await this.postRepository.decrement(postId);
       return { message: '찜목록에서 삭제하였습니다.' };
     }
   };
