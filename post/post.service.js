@@ -7,8 +7,7 @@ class PostService {
   // 위치별 거래글 조회
   findPostByLoc = async (locationId) => {
     const locationPost = await this.postRepository.findPostByLoc(locationId);
-    if (locationPost.length < 1)
-      throw new Error('해당 지역에는 거래글이 없습니다.');
+    if (locationPost.length < 1) return [];
 
     let result = [];
     locationPost.forEach((post) => {
@@ -23,7 +22,7 @@ class PostService {
   // 카테고리별 거래글 조회
   findPostByCat = async (categoryId) => {
     const categoryPost = await this.postRepository.findPostByCat(categoryId);
-    if (!categoryPost) throw new error('해당 카테고리에는 거래글이 없습니다.');
+    if (!categoryPost) return [];
 
     let result = [];
     categoryPost.forEach((post) => {
@@ -36,7 +35,7 @@ class PostService {
   // 거래글 제목 검색
   findPostByTitle = async (title) => {
     const titlePost = await this.postRepository.findPostByTitle(title);
-    if (!titlePost) throw new error('해당하는 타이틀의 거래글이 없습니다.');
+    if (!titlePost) return [];
 
     let result = [];
     titlePost.forEach((post) => {
