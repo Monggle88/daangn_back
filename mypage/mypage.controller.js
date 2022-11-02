@@ -73,6 +73,16 @@ class MypageController {
     }
   };
 
+  // locationId 변경
+  changeLocationId = async (req, res, next) => {
+    try {
+      await this.mypageService.changeLocationId(req, res);
+      res.status(200).json({ ok: true, msg: '동네를 변경했습니다!' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   // getMypage 내 정보 조회
   getMypage = async (req, res, next) => {
     try {

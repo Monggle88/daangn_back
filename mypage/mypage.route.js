@@ -26,6 +26,8 @@ router.put(
 router.put('/nickname', Auth, mypageController.changeNickname);
 // 비밀번호 변경
 router.put('/password', Auth, mypageController.changePassword);
+// locationId 변경
+router.put('/locationId', Auth, mypageController.changeLocationId);
 // 유저 정보 조회
 router.get('/:userId', Auth, mypageController.getDetailByUserId);
 // 내 정보 조회

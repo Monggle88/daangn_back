@@ -69,6 +69,14 @@ class MypageRepository {
     );
   };
 
+  // locationId 변경
+  changeLocationId = async (userId, locationId) => {
+    await Users.update(
+      { locationId, updatedAt: Date.now() },
+      { where: { userId } }
+    );
+  };
+
   // getUserDetail 내 정보 조회
   getUserDetail = async (userId) => {
     return await Users.findOne({

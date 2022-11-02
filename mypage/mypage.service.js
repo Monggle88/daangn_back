@@ -116,6 +116,14 @@ class MypageService {
     await this.mypageRepository.changePassword(userId, hashedPassword);
   }
 
+  // locationId 변경
+  async changeLocationId(req, res) {
+    const { userId } = res.locals.user;
+    const { locationId } = req.body;
+
+    await this.mypageRepository.changeLocationId(userId, locationId);
+  }
+
   // getMypage 내 정보 조회
   async getMypage(req, res) {
     const { userId } = res.locals.user;
