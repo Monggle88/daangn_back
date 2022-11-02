@@ -99,14 +99,21 @@ class MypageService {
   // changePassword 비밀번호 변경
   async changePassword(req, res) {
     const { userId } = res.locals.user;
-    const { password } = req.body;
+    const { oldPassword, newPassword, confirm } = req.body;
 
-    const newPassword = await bcrypt.hash(
-      password,
+    const isUser = await this.mypageRepository.isUser(userId, oldPassword);
+
+    const auth = await bcrypt.compare(oldPassword, isUser.password);
+    if (!auth) throw new Error('비밀번호를 확인해주세요.');
+
+    if (newPassword !== confirm) throw new Error('비밀번호를 확인해주세요.');
+
+    const hashedPassword = await bcrypt.hash(
+      newPassword,
       Number(process.env.BCRYPT_SALT_ROUNDS)
-    ); // 임시임시
+    );
 
-    await this.mypageRepository.changePassword(userId, newPassword);
+    await this.mypageRepository.changePassword(userId, hashedPassword);
   }
 
   // getMypage 내 정보 조회

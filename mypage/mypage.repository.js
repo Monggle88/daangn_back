@@ -88,6 +88,11 @@ class MypageRepository {
   getSaleslistByPostId = async (postId) => {
     return await SalePosts.findOne({ where: { postId } });
   };
+
+  // 아이디 비밀번호로 유저 정보 조회
+  isUser = async (userId) => {
+    return await Users.findOne({ where: { userId } });
+  };
 }
 
 module.exports = MypageRepository;
