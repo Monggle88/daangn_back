@@ -46,7 +46,12 @@ class MypageRepository {
   };
 
   // changeProfileImg 프로필 이미지 변경
-  async changeProfileImg(userId) {}
+  async changeProfileImg(userId, profileImage) {
+    await Users.update(
+      { profileImage, updatedAt: Date.now() },
+      { where: { userId } }
+    );
+  }
 
   // changeNickname 닉네임 변경
   changeNickname = async (userId, nickname) => {

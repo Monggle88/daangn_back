@@ -2,12 +2,10 @@ const express = require('express');
 const router = express.Router();
 
 const Auth = require('../middlewares/authMiddleware');
+const multerS3 = require('../middlewares/imageUploadMiddleware');
 const PostController = require('./post.controller');
+const multer = new multerS3();
 const postController = new PostController();
-
-// 불필요한 trycatch, console.log 삭제
-// 위치별, 카테고리별 stauts가 2인 게시글 버리기
-// 코드 정리
 
 // 위치별 조회 ㅇ
 router.get('/loc', Auth, postController.findPostByLoc);
@@ -17,10 +15,20 @@ router.get('/cat/:categoryId', Auth, postController.findPostByCat);
 router.get('/search', Auth, postController.findPostByTitle);
 // 상세 조회
 router.get('/:postId', Auth, postController.findOnePost);
-// 거래글 생성 (닉네임이 0)
-router.post('/', Auth, postController.createPost);
+// 거래글 생성
+router.post(
+  '/',
+  Auth,
+  multer.upload.single('postImgUrl'),
+  postController.createPost
+);
 // 거래글 수정 ㅇ
-router.put('/:postId', Auth, postController.updatePost);
+router.put(
+  '/:postId',
+  Auth,
+  multer.upload.single('postImgUrl'),
+  postController.updatePost
+);
 // 거래글 상태 수정 ㅇ
 router.put('/status/:postId', Auth, postController.updateStatus);
 // 거래글 삭제 ㅇ

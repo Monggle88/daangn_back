@@ -7,10 +7,20 @@ class UserController {
 
   signup = async (req, res, next) => {
     try {
-      const { locationId, nickname, password, confirm, email, profileImage } =
+      const { locationId, nickname, password, confirm, email } =
         await signupSchema.validateAsync(req.body);
+
       if (password !== confirm)
         throw new Error('비밀번호 입력란과 확인란이 일치하지 않습니다');
+
+      // 파일이 있으면 key값으로 이름을 정해주고 없으면 null
+      const imageFileName = req.file ? req.file.key : null;
+
+      // imageFileName에 파일명이 들어 갔으면 s3 url주소를 추가
+      const profileImage = imageFileName
+        ? process.env.S3_STORAGE_URL + imageFileName
+        : 'https://d1unjqcospf8gs.cloudfront.net/assets/users/default_profile_80-b61ffca3ea2415f86ca30e1d04c2c480d165fdaf778a82b4ce025b21ac4333a0.png';
+
       await this.userService.signup(
         locationId,
         nickname,
@@ -18,6 +28,7 @@ class UserController {
         email,
         profileImage
       );
+
       res.status(201).json({ ok: true, message: '회원가입에 성공하였습니다' });
     } catch (error) {
       next(error);
