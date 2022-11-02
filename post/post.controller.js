@@ -6,12 +6,12 @@ class PostController {
   // 위치별 거래글 조회
   findPostByLoc = async (req, res, next) => {
     try {
-      // const { locationId } = res.locals.user;
-      const locationId = 1;
+      const { locationId } = res.locals.user;
 
       const locationPost = await this.postService.findPostByLoc(locationId);
 
       res.status(200).json({ data: locationPost });
+      // res.status(200).json({ data: locationPost });
       // res.status(200).send({ data: locationPost });
     } catch (err) {
       next(err);
@@ -31,7 +31,7 @@ class PostController {
     }
   };
 
-  // 제목검색 거래글 조회 검색기능 왜 잘될까?
+  // 제목검색 거래글 조회 검색기능
   findPostByTitle = async (req, res, next) => {
     try {
       let { keyword } = req.query;
@@ -58,15 +58,17 @@ class PostController {
 
       const findOnePost = await this.postService.findOnePost(postId);
 
+      const isWish = await this.postService.isWish(postId);
+
       const otherPosts = await this.postService.findPostByUser(
         findOnePost.userId,
         postId
       );
 
       // res.status(200).send({ data: findOnePost, otherPosts: otherPosts });
-      res
-        .status(200)
-        .send({ data: { post: findOnePost, otherPosts: otherPosts } });
+      res.status(200).send({
+        data: { post: findOnePost, isWish: isWish, otherPosts: otherPosts },
+      });
     } catch (err) {
       next(err);
     }
