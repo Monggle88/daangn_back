@@ -59,8 +59,6 @@ class PostService {
   isWish = async (postId) => {
     let isWish = await this.postRepository.isWish(postId);
 
-    isWish ? (isWish = true) : (isWish = false);
-
     return isWish;
   };
 
