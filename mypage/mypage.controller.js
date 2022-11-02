@@ -47,9 +47,7 @@ class MypageController {
   changeProfileImg = async (req, res, next) => {
     try {
       await this.mypageService.changeProfileImg(req, res);
-      res
-        .status(200)
-        .json({ ok: 'true', msg: '프로필 이미지를 변경했습니다!' });
+      res.status(200).json({ ok: true, msg: '프로필 이미지를 변경했습니다!' });
     } catch (error) {
       next(error);
     }
@@ -59,7 +57,7 @@ class MypageController {
   changeNickname = async (req, res, next) => {
     try {
       await this.mypageService.changeNickname(req, res);
-      res.status(200).json({ ok: 'true', msg: '닉네임을 변경했습니다!' });
+      res.status(200).json({ ok: true, msg: '닉네임을 변경했습니다!' });
     } catch (error) {
       next(error);
     }
@@ -69,7 +67,7 @@ class MypageController {
   changePassword = async (req, res, next) => {
     try {
       await this.mypageService.changePassword(req, res);
-      res.status(200).json({ ok: 'true', msg: '비밀번호를 변경했습니다!' });
+      res.status(200).json({ ok: true, msg: '비밀번호를 변경했습니다!' });
     } catch (error) {
       next(error);
     }

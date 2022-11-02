@@ -77,7 +77,7 @@ class PostController {
     try {
       await this.postService.createPost(req, res);
 
-      res.status(200).send({ ok: 'true', message: '거래글이 생성되었습니다.' });
+      res.status(200).send({ ok: true, message: '거래글이 생성되었습니다.' });
     } catch (err) {
       next(err);
     }
@@ -88,7 +88,7 @@ class PostController {
     try {
       await this.postService.updatePost(req, res);
 
-      res.status(200).send({ ok: 'true', message: '거래글이 수정되었습니다.' });
+      res.status(200).send({ ok: true, message: '거래글이 수정되었습니다.' });
     } catch (err) {
       next(err);
     }
@@ -99,7 +99,7 @@ class PostController {
     try {
       await this.postService.updateStatus(req, res);
 
-      res.status(200).send({ ok: 'true', message: '상태가 변경되었습니다.' });
+      res.status(200).send({ ok: true, message: '상태가 변경되었습니다.' });
     } catch (err) {
       next(err);
     }
@@ -110,7 +110,7 @@ class PostController {
     try {
       await this.postService.deletePost(req, res);
 
-      res.status(200).send({ ok: 'true', message: '거래글이 삭제되었습니다.' });
+      res.status(200).send({ ok: true, message: '거래글이 삭제되었습니다.' });
     } catch (err) {
       next(err);
     }
