@@ -13,9 +13,9 @@ const postController = new PostController();
 router.get('/loc', Auth, postController.findPostByLoc);
 // 카테고리별 조회 ㅇ
 router.get('/cat/:categoryId', Auth, postController.findPostByCat);
-// 타이틀 검색 (에러안뜸)
+// 타이틀 검색
 router.get('/search', Auth, postController.findPostByTitle);
-// 상세 조회 (걍안댐)
+// 상세 조회
 router.get('/:postId', Auth, postController.findOnePost);
 // 거래글 생성 (닉네임이 0)
 router.post('/', Auth, postController.createPost);

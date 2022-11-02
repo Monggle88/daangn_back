@@ -38,7 +38,8 @@ class PostController {
 
       keyword = keyword.trim();
 
-      if (keyword < 1) throw new Error('키워드를 두 글자 이상 입력해주세요');
+      if (keyword.length < 2)
+        throw new Error('키워드를 두 글자 이상 입력해주세요');
 
       const titlePost = await this.postService.findPostByTitle(keyword);
 
@@ -57,11 +58,12 @@ class PostController {
 
       const findOnePost = await this.postService.findOnePost(postId);
 
-      const findPostByUser = await this.postService.findPostByUser(userId);
+      const otherPosts = await this.postService.findPostByUser(
+        findOnePost.userId,
+        postId
+      );
 
-      res
-        .status(200)
-        .send({ data: findOnePost }, { otherPosts: findPostByUser });
+      res.status(200).send([{ data: findOnePost }, { otherPosts: otherPosts }]);
     } catch (err) {
       next(err);
     }

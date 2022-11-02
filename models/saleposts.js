@@ -53,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       nickname: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
       },
       profileImage: {

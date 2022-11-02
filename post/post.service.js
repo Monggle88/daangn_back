@@ -55,27 +55,32 @@ class PostService {
     let isWish = await this.postRepository.isWish(postId);
     isWish ? (isWish = true) : (isWish = false);
 
-    let result = [];
-    findOnePost.forEach((post) => {
-      result.push(post);
-    });
+    // let result = [];
+    // findOnePost.forEach((post) => {
+    //   result.push(post);
+    // });
 
-    return isWish, result;
+    return isWish, findOnePost;
   };
 
   // 유저의 다른 글 보기
-  findPostByUser = async (userId) => {
-    await this.postRepository.findPostByUser(userId);
+  findPostByUser = async (userId, postId) => {
+    const post = await this.postRepository.findPostByUser(userId);
+
+    let otherPosts = [];
+    post.forEach((post) => {
+      if (post.postId !== Number(postId)) {
+        otherPosts.push(post);
+      }
+    });
+
+    return otherPosts;
   };
 
   // 거래글 생성
   createPost = async (req, res) => {
     const { categoryId, title, content, postImgUrl, price } = req.body;
     const { userId, locationId, nickname, profileImage } = res.locals.user;
-    // const userId = 1; // 임시
-    // const locationId = 1; // 임시
-    // const nickname = 'test1'; // 임시
-    // const profileImage = 'test.png'; // 임시
 
     const post = {
       userId,

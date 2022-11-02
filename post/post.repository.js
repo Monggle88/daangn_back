@@ -62,6 +62,8 @@ class PostRepository {
 
   // 거래글 생성
   createPost = async (post) => {
+    console.log(`nickname: ${post.nickname}`);
+
     const createPost = await SalePosts.create({
       ...post,
       createdAt: String(Date.now()),
@@ -124,57 +126,44 @@ class PostRepository {
       where: { userId: userId },
     });
 
-    console.log('repo wishList');
-
     return wishList;
   };
 
   // findWish
   findWish = async (userId, postId) => {
     const updateWish = await Wishes.findOne({
-      where: { userId: userId, postId: postId },
+      where: { userId, postId },
     });
-
-    console.log('repo findWish');
 
     return updateWish;
   };
 
   // 찜하기
   createWish = async (userId, postId) => {
-    const createWish = await Wishes.create({
+    await Wishes.create({
       userId,
       postId,
       createdAt: String(Date.now()),
     });
-
-    console.log('repo createWish');
-
-    return createWish;
   };
 
   // 찜하기 취소
   deleteWish = async (userId, postId) => {
-    const deleteWish = await Wishes.destroy({
-      where: postId,
-      userId,
+    await Wishes.destroy({
+      where: { postId, userId },
     });
-
-    console.log('repo deleteWish');
-
-    return deleteWish;
   };
 
   // wishCount 증가
   increment = async (postId) => {
-    await SalePosts.increment({ wishCount: 1 }, { where: postId });
+    await SalePosts.increment({ wishCount: 1 }, { where: { postId } });
   };
 
   // wishCount 감소
   decrement = async (postId) => {
     const decrement = await SalePosts.decrement(
       { wishCount: 1 },
-      { where: postId }
+      { where: { postId } }
     );
 
     return decrement;
