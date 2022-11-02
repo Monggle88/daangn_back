@@ -27,7 +27,7 @@ class PostService {
 
     let result = [];
     categoryPost.forEach((post) => {
-      result.push(post)
+      result.push(post);
     });
 
     return result;
@@ -40,7 +40,7 @@ class PostService {
 
     let result = [];
     titlePost.forEach((post) => {
-      result.push(post)
+      result.push(post);
     });
 
     return result;
@@ -51,32 +51,45 @@ class PostService {
     const findOnePost = await this.postRepository.findOnePost(postId);
     if (!findOnePost) throw new error('존재하지 않는 거래글입니다. servDetail');
     console.log('serv findOnePost', findOnePost);
-    // 찜 여부 확인
-    let isWish = await this.postRepository.isWish(postId);
-    isWish ? (isWish = true) : (isWish = false);
-
-    let result = [];
-    findOnePost.forEach((post) => {
-      result.push(post)
-    });
-
-    return isWish, result;
-
+    
+    return isWish, findOnePost;
   };
 
+// 찜 여부 확인
+isWish = async(postId) => {
+  let isWish = await this.postRepository.isWish(postId);
+
+  isWish ? (isWish = true) : (isWish = false);
+  
+  return isWish;
+}
+
   // 유저의 다른 글 보기
-  findPostByUser = async (userId) => {
-    await this.postRepository.findPostByUser(userId);
+  findPostByUser = async (userId, postId) => {
+    const post = await this.postRepository.findPostByUser(userId);
+
+    let otherPosts = [];
+    post.forEach((post) => {
+      if (post.postId !== Number(postId)) {
+        otherPosts.push(post);
+      }
+    });
+
+    return otherPosts;
   };
 
   // 거래글 생성
   createPost = async (req, res) => {
-    const { categoryId, title, content, postImgUrl, price } = req.body;
+    const { categoryId, title, content, price } = req.body;
     const { userId, locationId, nickname, profileImage } = res.locals.user;
-    // const userId = 1; // 임시
-    // const locationId = 1; // 임시
-    // const nickname = 'test1'; // 임시
-    // const profileImage = 'test.png'; // 임시
+
+    // 파일이 있으면 key값으로 이름을 정해주고 없으면 null
+    const imageFileName = req.file ? req.file.key : null;
+
+    // imageFileName에 파일명이 들어 갔으면 s3 url주소를 추가
+    const postImgUrl = imageFileName
+      ? process.env.S3_STORAGE_URL + imageFileName
+      : null;
 
     const post = {
       userId,
@@ -121,7 +134,7 @@ class PostService {
     if (!findOnePost) throw new error('존재하지 않는 게시글입니다.');
     if (findOnePost.userId !== userId) throw new error('수정 권한이 없습니다.');
 
-    await this.postRepository.updatePost(post);
+    await this.postRepository.updatePost(postId, post);
   };
 
   // 거래글 status 수정
@@ -142,7 +155,8 @@ class PostService {
     if (!findOnePost) throw new error('존재하지 않는 게시글입니다.');
     if (findOnePost.userId !== userId) throw new error('수정 권한이 없습니다.');
 
-    await this.postRepository.updateStatus(post);
+    if ( status === 2) { await this.postRepository.createTransaction(postId, userId)}
+    else { await this.postRepository.updateStatus(post); }
   };
 
   // 거래글 삭제
@@ -165,13 +179,14 @@ class PostService {
   //찜 update(추가삭제 동시)
   updateWish = async (userId, postId) => {
     const findWish = await this.postRepository.findWish(userId, postId);
+
     if (!findWish) {
-      await this.postRepository.createWish({ userId: userId, postId: postId });
-      await this.postRepository.increment({ userId: userId });
+      await this.postRepository.createWish(userId, postId);
+      await this.postRepository.increment(postId);
       return { message: '찜목록에 추가하였습니다.' };
     } else {
-      await this.postRepository.deleteWish({ userId: userId, postId: postId });
-      await this.postRepository.decrement({ userId: userId });
+      await this.postRepository.deleteWish(userId, postId);
+      await this.postRepository.decrement(postId);
       return { message: '찜목록에서 삭제하였습니다.' };
     }
   };

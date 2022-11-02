@@ -1,7 +1,6 @@
 const { SalePosts, Wishes, TransactionList } = require('../models');
 const { Op } = require('sequelize');
 
-
 class PostRepository {
   // 위치별 거래글 조회
   findPostByLoc = async (locationId) => {
@@ -36,7 +35,7 @@ class PostRepository {
   // 사용자별 거래글 조회
   findPostByUser = async (userId) => {
     const otherPosts = await SalePosts.findAll({
-      attributes: ["postId", "title", "price", "postImgUrl"],
+      attributes: ['postId', 'title', 'price', 'postImgUrl'],
       where: { userId },
       order: [['updatedAt', 'DESC']],
       limit: 4,
@@ -63,6 +62,8 @@ class PostRepository {
 
   // 거래글 생성
   createPost = async (post) => {
+    console.log(`nickname: ${post.nickname}`);
+
     const createPost = await SalePosts.create({
       ...post,
       createdAt: String(Date.now()),
@@ -73,13 +74,13 @@ class PostRepository {
   };
 
   // 거래글 수정
-  updatePost = async (post) => {
+  updatePost = async (postId, post) => {
     const updatePost = await SalePosts.update(
       {
         ...post,
         updatedAt: String(Date.now()),
       },
-      { where: { postId: post.postId } }
+      { where: { postId } }
     );
 
     if (updatePost) {
@@ -118,77 +119,61 @@ class PostRepository {
       return { message: '삭제 실패' };
     }
   };
+
+  // 찜목록
+  wishList = async (userId) => {
+    const wishList = await Wishes.findAll({
+      where: { userId: userId },
+    });
+
+    return wishList;
+  };
+
+  // findWish
+  findWish = async (userId, postId) => {
+    const updateWish = await Wishes.findOne({
+      where: { userId, postId },
+    });
+
+    return updateWish;
+  };
+
+  // 찜하기
+  createWish = async (userId, postId) => {
+    await Wishes.create({
+      userId,
+      postId,
+      createdAt: String(Date.now()),
+    });
+  };
+
+  // 찜하기 취소
+  deleteWish = async (userId, postId) => {
+    await Wishes.destroy({
+      where: { postId, userId },
+    });
+  };
+
+  // wishCount 증가
+  increment = async (postId) => {
+    await SalePosts.increment({ wishCount: 1 }, { where: { postId } });
+  };
+
+  // wishCount 감소
+  decrement = async (postId) => {
+    const decrement = await SalePosts.decrement(
+      { wishCount: 1 },
+      { where: { postId } }
+    );
+
+    return decrement;
+  };
+
+  // 거래내역 추가
+  createTransaction = async (postId, userId) => {
+    const createTransaction = await TransactionList.create(postId, userId);
+
+    return createTransaction;
+  };
 }
-
-// 찜목록
-wishList = async (userId) => {
-  const wishList = await Wishes.findAll({
-    where: { userId: userId },
-  });
-
-  console.log('repo wishList');
-
-  return wishList;
-};
-
-// findWish
-findWish = async (userId, postId) => {
-  const updateWish = await Wishes.findOne({
-    where: { userId: userId, postId: postId },
-  });
-
-  console.log('repo findWish');
-
-  return updateWish;
-};
-
-// 찜하기
-createWish = async (postId, userId) => {
-  const createWish = await Wishes.create(postId, userId);
-
-  console.log('repo createWish');
-
-  return createWish;
-};
-
-// 찜하기 취소
-deleteWish = async (postId, userId) => {
-  const deleteWish = await Wishes.destroy({
-    where: postId,
-    userId,
-  });
-
-  console.log('repo deleteWish');
-
-  return deleteWish;
-};
-
-// wishCount 증가
-increment = async (postId) => {
-  const increment = await SalePosts.increment(
-    { wishCount: 1 },
-    { where: postId }
-  );
-
-  console.log('repo increment');
-
-  return increment;
-};
-
-// wishCount 감소
-decrement = async (postId) => {
-  const decrement = await SalePosts.decrement(
-    { wishCount: 1 },
-    { where: postId }
-  );
-
-  return decrement;
-};
-
-// 거래내역 추가
-createTransaction = async (postId, userId) => {
-  const createTransaction = await TransactionList.create(postId, userId);
-
-  return createTransaction;
-};
 module.exports = PostRepository;

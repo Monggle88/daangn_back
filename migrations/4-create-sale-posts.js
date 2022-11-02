@@ -17,7 +17,7 @@ module.exports = {
         },
       },
       nickname: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING(500),
         allowNull: false,
       },
       profileImage: {

@@ -53,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       nickname: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING(500),
         allowNull: false,
       },
       profileImage: {
@@ -94,7 +94,6 @@ module.exports = (sequelize, DataTypes) => {
       },
       status: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         defaultValue: 0,
       },
       wishCount: {

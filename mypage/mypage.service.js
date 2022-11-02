@@ -72,8 +72,18 @@ class MypageService {
   // changeProfileImg 프로필 이미지 변경
   async changeProfileImg(req, res) {
     const { userId } = res.locals.user;
-    await this.mypageRepository.changeProfileImg(userId);
-    return result;
+
+    // 파일이 있으면 key값으로 이름을 정해주고 없으면 null
+    const imageFileName = req.file ? req.file.key : null;
+
+    // imageFileName에 파일명이 들어 갔으면 s3 url주소를 추가
+    const profileImage = imageFileName
+      ? process.env.S3_STORAGE_URL + imageFileName
+      : 'https://d1unjqcospf8gs.cloudfront.net/assets/users/default_profile_80-b61ffca3ea2415f86ca30e1d04c2c480d165fdaf778a82b4ce025b21ac4333a0.png';
+
+    console.log(`imageFileName = ${profileImage}`);
+
+    await this.mypageRepository.changeProfileImg(userId, profileImage);
   }
 
   // changeNickname 닉네임 변경

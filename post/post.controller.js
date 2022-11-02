@@ -6,11 +6,13 @@ class PostController {
   // 위치별 거래글 조회
   findPostByLoc = async (req, res, next) => {
     try {
-      const { locationId } = res.locals.user; 
+      // const { locationId } = res.locals.user;
+      const locationId = 1;
 
       const locationPost = await this.postService.findPostByLoc(locationId);
 
-      res.status(200).send({ data: locationPost });
+      res.status(200).json({ data: locationPost });
+      // res.status(200).send({ data: locationPost });
     } catch (err) {
       next(err);
     }
@@ -36,7 +38,8 @@ class PostController {
 
       keyword = keyword.trim();
 
-      if (keyword < 1) throw new Error('키워드를 두 글자 이상 입력해주세요');
+      if (keyword.length < 2)
+        throw new Error('키워드를 두 글자 이상 입력해주세요');
 
       const titlePost = await this.postService.findPostByTitle(keyword);
 
@@ -55,9 +58,17 @@ class PostController {
 
       const findOnePost = await this.postService.findOnePost(postId);
 
-      const findPostByUser = await this.postService.findPostByUser(userId);
+      const isWish = await this.postService.isWish(postId);
 
-      res.status(200).send({ data: findOnePost }, { otherPosts: findPostByUser });
+      const otherPosts = await this.postService.findPostByUser(
+        findOnePost.userId,
+        postId
+      );
+
+      // res.status(200).send({ data: findOnePost, otherPosts: otherPosts });
+      res
+        .status(200)
+        .send({ data: { post: findOnePost, isWish: isWish, otherPosts: otherPosts } });
     } catch (err) {
       next(err);
     }
@@ -88,7 +99,7 @@ class PostController {
   // 거래글 status 수정
   updateStatus = async (req, res, next) => {
     try {
-      await this.postService.udpateStatus(req, res);
+      await this.postService.updateStatus(req, res);
 
       res.status(200).send({ ok: 'true', message: '상태가 변경되었습니다.' });
     } catch (err) {

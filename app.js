@@ -1,9 +1,11 @@
 require('dotenv').config();
 const express = require('express');
-const app = express();
 const cors = require('cors');
 const fs = require('fs');
 const HTTPS = require('https');
+const morgan = require('morgan');
+const app = express();
+
 const port = process.env.PORT;
 const cookieParser = require('cookie-parser');
 const {
@@ -13,6 +15,7 @@ const {
 const routes = require('./index');
 
 app.use(cors({ origin: '*', credential: 'true' }));
+app.use(morgan('tiny'));
 app.use(express.json());
 app.use(cookieParser());
 app.use('/', routes);
