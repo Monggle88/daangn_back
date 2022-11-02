@@ -52,20 +52,24 @@ class UserController {
   };
 
   emailDup = async (req, res, next) => {
-    const { email } = req.body;
-    if (email == '') throw new Error('이메일을 입력해 주세요');
-    const emailDup = await this.userService.dupCheckEmail(email);
-    if (emailDup) {
-      return res.status(400).json({
-        ok: false,
-        errorMessage: '이메일이 이미 존재합니다',
-      });
-    } else {
-      await this.userService.dupCheckEmail(email);
-      return res.status(200).json({
-        ok: true,
-        message: '사용 가능한 이메일입니다',
-      });
+    try {
+      const { email } = req.body;
+      if (email == '') throw new Error('이메일을 입력해 주세요');
+      const emailDup = await this.userService.dupCheckEmail(email);
+      if (emailDup) {
+        return res.status(400).json({
+          ok: false,
+          errorMessage: '이메일이 이미 존재합니다',
+        });
+      } else {
+        await this.userService.dupCheckEmail(email);
+        return res.status(200).json({
+          ok: true,
+          message: '사용 가능한 이메일입니다',
+        });
+      }
+    } catch (error) {
+      next(error);
     }
   };
 
