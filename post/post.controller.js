@@ -63,7 +63,10 @@ class PostController {
         postId
       );
 
-      res.status(200).send([{ data: findOnePost }, { otherPosts: otherPosts }]);
+      // res.status(200).send({ data: findOnePost, otherPosts: otherPosts });
+      res
+        .status(200)
+        .send({ data: { post: findOnePost, otherPosts: otherPosts } });
     } catch (err) {
       next(err);
     }
