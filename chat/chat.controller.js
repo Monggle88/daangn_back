@@ -37,7 +37,7 @@ class ChatsController {
       res.status(201).send({ data: CLID });
       return CLID;
     } catch (error) {
-      return res.status(500).send({ errorMessage: error.message });
+      next(error);
     }
   };
 
@@ -50,10 +50,10 @@ class ChatsController {
       //################################임시 데이터 영역 (로그인 기능이 구현되면 이부분을 수정)
 
       const myChat = await ChatList.findAll({ where: { userId } });
-      console.log(myChat);
+
       return res.status(201).send({ data: myChat });
     } catch (error) {
-      return res.status(500).send({ errorMessage: error.message });
+      next(error);
     }
   };
 
@@ -96,7 +96,7 @@ class ChatsController {
 
       return res.status(201).send({ data: data, chatData: chatData });
     } catch (error) {
-      return res.status(500).send({ errorMessage: error.message });
+      next(error);
     }
   };
 
@@ -107,7 +107,7 @@ class ChatsController {
       const chats = await this.chatsService.getChats(chatListId); //포스트서비스의 findAllPost를 사용
       res.status(200).json({ data: chats }); //컨트롤러는 요청과 응답에 관여하니 응답만
     } catch (error) {
-      return res.status(500).send({ errorMessage: error.message });
+      next(error);
     }
   };
 
@@ -136,7 +136,7 @@ class ChatsController {
       await this.chatsService.updateLastChat(chatListId, message);
       res.status(201).send({ data: createChatData });
     } catch (error) {
-      return res.status(500).send({ errorMessage: error.message });
+      next(error);
     }
   };
 }
