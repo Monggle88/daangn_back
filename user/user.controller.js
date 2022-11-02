@@ -36,15 +36,19 @@ class UserController {
   };
 
   login = async (req, res, next) => {
-    const { email, password } = await loginSchema.validateAsync(req.body);
-    // if(payload instanceof Error) throw Error;
-    const loginUser = await this.userService.login(email, password);
-    // if(!loginUser){
-    //     return res.status(400).json({ ok: false, errorMessage:"이메일 혹은 비밀번호를 확인해 주세요" })
-    // }  service에서 했음 프론트랑 얘기해 보고 수정
-    res.header('Authorization', loginUser);
-    res.cookie('Authorization', loginUser, { Expires: 3600 });
-    res.send({ token: loginUser });
+    try {
+      const { email, password } = await loginSchema.validateAsync(req.body);
+      // if(payload instanceof Error) throw Error;
+      const loginUser = await this.userService.login(email, password);
+      // if(!loginUser){
+      //     return res.status(400).json({ ok: false, errorMessage:"이메일 혹은 비밀번호를 확인해 주세요" })
+      // }  service에서 했음 프론트랑 얘기해 보고 수정
+      res.header('Authorization', loginUser);
+      res.cookie('Authorization', loginUser, { Expires: 3600 });
+      res.send({ token: loginUser });
+    } catch (error) {
+      next(error);
+    }
   };
 
   emailDup = async (req, res, next) => {
