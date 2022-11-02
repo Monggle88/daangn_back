@@ -41,7 +41,8 @@ class UserService {
       },
       'secret_dang',
       {
-        expiresIn: '1h',
+        // expiresIn: '1h',
+        expiresIn: '100s',
       }
     );
   };
