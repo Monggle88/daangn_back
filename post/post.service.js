@@ -31,25 +31,6 @@ class PostService {
     });
 
     return result;
-    // const allCategoryPost = categoryPost.map((post) => {
-    //   return {
-    //     postId: post.postId,
-    //     userId: post.userId,
-    //     categoryId: post.categoryId,
-    //     locationId: post.locationId,
-    //     title: post.title,
-    //     content: post.content,
-    //     postImgUrl: post.postImgUrl,
-    //     price: post.price,
-    //     status: post.status,
-    //     wishCount: post.wishCount,
-    //     chatCount: post.chatCount,
-    //     createdAt: post.createdAt,
-    //     updatedAt: post.updatedAt,
-    //   };
-    // });
-
-    // return allCategoryPost;
   };
 
   // 거래글 제목 검색
@@ -63,25 +44,6 @@ class PostService {
     });
 
     return result;
-    // const allTitlePost = titlePost.map((post) => {
-    //   return {
-    //     postId: post.postId,
-    //     userId: post.userId,
-    //     categoryId: post.categoryId,
-    //     locationId: post.locationId,
-    //     title: post.title,
-    //     content: post.content,
-    //     postImgUrl: post.postImgUrl,
-    //     price: post.price,
-    //     status: post.status,
-    //     wishCount: post.wishCount,
-    //     chatCount: post.chatCount,
-    //     createdAt: post.createdAt,
-    //     updatedAt: post.updatedAt,
-    //   };
-    // });
-
-    // return allTitlePost;
   };
 
   // 거래글 상세조회
@@ -109,11 +71,11 @@ class PostService {
   // 거래글 생성
   createPost = async (req, res) => {
     const { categoryId, title, content, postImgUrl, price } = req.body;
-    // const { userId, locationId, nickname, profileImage } = res.locals.user;
-    const userId = 1; // 임시
-    const locationId = 1; // 임시
-    const nickname = 'test1'; // 임시
-    const profileImage = 'test.png'; // 임시
+    const { userId, locationId, nickname, profileImage } = res.locals.user;
+    // const userId = 1; // 임시
+    // const locationId = 1; // 임시
+    // const nickname = 'test1'; // 임시
+    // const profileImage = 'test.png'; // 임시
 
     const post = {
       userId,
