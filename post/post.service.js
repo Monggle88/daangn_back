@@ -131,7 +131,7 @@ class PostService {
     if (!findOnePost) throw new error('존재하지 않는 게시글입니다.');
     if (findOnePost.userId !== userId) throw new error('수정 권한이 없습니다.');
 
-    await this.postRepository.updatePost(postId, postId, post);
+    await this.postRepository.updatePost(postId, post);
   };
 
   // 거래글 status 수정
