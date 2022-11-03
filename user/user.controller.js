@@ -1,6 +1,11 @@
 const UserService = require('./user.service');
 const jwt = require('jsonwebtoken');
-const { signupSchema, loginSchema, emailDupSchema, nicknameDupSchema } = require('../util/validation');
+const {
+  signupSchema,
+  loginSchema,
+  emailDupSchema,
+  nicknameDupSchema,
+} = require('../util/validation');
 
 class UserController {
   userService = new UserService();
@@ -44,7 +49,8 @@ class UserController {
       //     return res.status(400).json({ ok: false, errorMessage:"이메일 혹은 비밀번호를 확인해 주세요" })
       // }  service에서 했음 프론트랑 얘기해 보고 수정
       res.header('Authorization', loginUser);
-      res.cookie('Authorization', loginUser, { Expires: 3600 });
+      const ExpiryDate = new Date(Date.now() + 60 * 60 * 1000);
+      res.cookie('Authorization', loginUser, { Expires: ExpiryDate });
       res.send({ token: loginUser });
     } catch (error) {
       next(error);
@@ -74,7 +80,7 @@ class UserController {
   };
 
   nicknameDup = async (req, res, next) => {
-    try{
+    try {
       const { nickname } = await nicknameDupSchema.validateAsync(req.body);
       if (nickname == '') throw new Error('닉네임을 입력해 주세요');
       const nicknameDup = await this.userService.dupCheckNickname(nickname);
@@ -90,8 +96,8 @@ class UserController {
           message: '사용 가능한 닉네임입니다',
         });
       }
-    }catch(error){
-      next(error)
+    } catch (error) {
+      next(error);
     }
   };
 }
