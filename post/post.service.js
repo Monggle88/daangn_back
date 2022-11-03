@@ -109,7 +109,15 @@ class PostService {
 
     const { postId } = req.params;
 
-    const { categoryId, title, content, postImgUrl, price } = req.body;
+    const { categoryId, title, content, price } = req.body;
+
+    // 파일이 있으면 key값으로 이름을 정해주고 없으면 null
+    const imageFileName = req.file ? req.file.key : null;
+
+    // imageFileName에 파일명이 들어 갔으면 s3 url주소를 추가
+    const postImgUrl = imageFileName
+      ? process.env.S3_STORAGE_URL + imageFileName
+      : null;
 
     const post = {
       userId,
@@ -117,7 +125,7 @@ class PostService {
       locationId,
       title,
       content,
-      postImgUrl,
+      postImgUrl: postImgUrl,
       price,
     };
 
@@ -142,13 +150,14 @@ class PostService {
 
     const { status } = req.body;
 
+    const findOnePost = await this.postRepository.findOnePost(postId);
+
     const post = {
       postId,
       userId,
       status,
     };
 
-    const findOnePost = await this.postRepository.findOnePost(postId);
     if (!findOnePost) throw new error('존재하지 않는 게시글입니다.');
     if (findOnePost.userId !== userId) throw new error('수정 권한이 없습니다.');
 
