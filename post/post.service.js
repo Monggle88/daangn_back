@@ -153,6 +153,7 @@ class PostService {
     if (findOnePost.userId !== userId) throw new error('수정 권한이 없습니다.');
 
     if (status === 2) {
+      await this.postRepository.updateStatus(post);
       await this.postRepository.createTransaction(postId, userId);
     } else {
       await this.postRepository.updateStatus(post);
