@@ -79,13 +79,11 @@ class PostController {
     try {
       const post = await this.postService.createPost(req, res);
 
-      res
-        .status(200)
-        .send({
-          ok: true,
-          message: '거래글이 생성되었습니다.',
-          postId: post.postId,
-        });
+      res.status(200).send({
+        ok: true,
+        message: '거래글이 생성되었습니다.',
+        postId: post.postId,
+      });
     } catch (err) {
       next(err);
     }
@@ -135,6 +133,25 @@ class PostController {
       res.status(200).json({ data: updateWish });
     } catch (err) {
       next(err);
+    }
+  };
+
+  statusDone = async (req, res, next) => {
+    try {
+      const { userId } = res.locals.user;
+      const { postId } = req.params;
+
+      const users = await this.postService.updateWish(userId, postId);
+      res.status(200).json({ data: users });
+    } catch (error) {
+      next(error);
+    }
+  };
+  addtransaction = async (req, res, next) => {
+    try {
+      //아쉽군
+    } catch (error) {
+      next(error);
     }
   };
 }

@@ -19,6 +19,7 @@ class ChatsController {
       const dup = await ChatList.findAll({ where: { userId, postId } });
       let CLID = 0;
 
+      const targetPost = await SalePosts.findOne({ where: { postId } });
       if (dup[0]) {
         //이미 채팅방이 있다면 그 채팅방의 아이디를 가져온다
         const dup_leng = dup.length;
@@ -26,7 +27,6 @@ class ChatsController {
       } else {
         //채팅방이 없다면 만든 다음 그 아이디를 가져온다.
         // postId의 소유주인지 확인
-        const targetPost = await SalePosts.findOne({ where: { postId } });
         if (targetPost.dataValues.userId === userId)
           throw new Error('본인의 게시글에 구매요청을 보낼 수 없습니다.');
 
@@ -36,6 +36,17 @@ class ChatsController {
         );
         CLID = createChattingRoomData.dataValues.chatListId;
       }
+
+      const buyerId = userId;
+      const sellerId = targetPost.userId;
+
+      const buyerMessage = '판매하시는 상품에 관심 있습니다!';
+      const sellerMessage = `'${targetPost.title}(${targetPost.price})' 상품을 판매중입니다!`;
+
+      await this.chatsService.createChats(sellerMessage, sellerId, CLID);
+      await this.chatsService.createChats(buyerMessage, buyerId, CLID);
+      await this.chatsService.updateLastChat(CLID, buyerMessage);
+
       res.status(201).send({ data: CLID });
       return CLID;
     } catch (error) {
@@ -46,7 +57,7 @@ class ChatsController {
   //내가 가진 채팅 목록을 가져온다.
   myRoom = async (req, res, next) => {
     try {
-      const { userId } = res.locals.user; //유저 아이디를 가져오고
+      const { userId, nickname, profileImage, locationId } = res.locals.user; //유저 아이디를 가져오고
 
       const myChat = await Chats.findAll({ where: { userId } });
 
@@ -60,6 +71,25 @@ class ChatsController {
           userId,
         },
         order: [['updatedAt', 'DESC']],
+      });
+
+      // const result = await ChatList.findAll({
+      //   where: { userId },
+      //   attributes: [
+      //     'userId',
+      //     'updatedAt',
+      //     [Sequelize.col('User.nickname'), 'userId'],
+      //   ],
+      //   order: [['updatedAt', 'DESC']],
+      // });
+
+      result.forEach((chat) => {
+        Object.assign(
+          chat.dataValues,
+          { nickname },
+          { profileImage },
+          { locationId }
+        );
       });
 
       return res.status(201).send({ data: result });
