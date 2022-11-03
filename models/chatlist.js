@@ -63,6 +63,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       timestamps: false,
       sequelize,
+      freezeTableName: true,
+      tableName: 'ChatList',
       modelName: 'ChatList',
     }
   );
