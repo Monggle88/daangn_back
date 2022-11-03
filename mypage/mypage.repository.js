@@ -18,7 +18,7 @@ class MypageRepository {
     let buyList = [];
 
     for (let i = 0; i < transactionList.length; i++) {
-      let tempPost = await SalePosts.findAll({
+      let tempPost = await SalePosts.findOne({
         where: { postId: transactionList[i].postId },
       });
       buyList.push(tempPost);
