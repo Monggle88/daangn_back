@@ -117,7 +117,7 @@ class PostService {
     // imageFileName에 파일명이 들어 갔으면 s3 url주소를 추가
     const postImgUrl = imageFileName
       ? process.env.S3_STORAGE_URL + imageFileName
-      : null;
+      : undefined;
 
     const post = {
       userId,
