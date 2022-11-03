@@ -102,6 +102,15 @@ class MypageController {
       next(error);
     }
   };
+
+  saleList = async (req, res, next) => {
+    try {
+      const result = await this.mypageService.salesList(req, res);
+      res.status(200).json({ data: result });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 module.exports = MypageController;

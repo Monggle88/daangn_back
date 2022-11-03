@@ -1,5 +1,6 @@
 const { SalePosts, Wishes, TransactionList } = require('../models');
 const { Op } = require('sequelize');
+const createApplication = require('express/lib/express');
 
 class PostRepository {
   // 위치별 거래글 조회
@@ -172,7 +173,13 @@ class PostRepository {
 
   // 거래내역 추가
   createTransaction = async (postId, userId) => {
-    const createTransaction = await TransactionList.create(postId, userId);
+    console.log(Number(postId), userId);
+    const createdAt = String(Date.now());
+    const createTransaction = await TransactionList.create({
+      postId: Number(postId),
+      userId: userId,
+      createdAt: createdAt,
+    });
 
     return createTransaction;
   };

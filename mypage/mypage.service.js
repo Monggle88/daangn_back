@@ -139,6 +139,11 @@ class MypageService {
 
     return await this.mypageRepository.getUserDetail(userId);
   }
+
+  async salesList(req, res) {
+    const { userId } = req.params;
+    return await this.mypageRepository.getSaleslist(userId);
+  }
 }
 
 module.exports = MypageService;

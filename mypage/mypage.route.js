@@ -33,4 +33,6 @@ router.get('/:userId', Auth, mypageController.getDetailByUserId);
 // 내 정보 조회
 router.get('', Auth, mypageController.getMypage);
 
+router.get('/profiles/:userId', Auth, mypageController.saleList);
+
 module.exports = router;
