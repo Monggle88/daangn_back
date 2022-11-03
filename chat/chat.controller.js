@@ -1,5 +1,7 @@
 const ChatsService = require('./chat.service');
 const { Users, Chats, ChatList, SalePosts } = require('../models'); //모델 데이터를 가져오고
+const Sq = require('sequelize');
+const Sequelize = Sq.Sequelize;
 
 class ChatsController {
   chatsService = new ChatsService();
@@ -44,14 +46,23 @@ class ChatsController {
   //내가 가진 채팅 목록을 가져온다.
   myRoom = async (req, res, next) => {
     try {
-      //################################임시 데이터 영역 (로그인 기능이 구현되면 이부분을 수정)
       const { userId } = res.locals.user; //유저 아이디를 가져오고
-      //   const userId = 3;
-      //################################임시 데이터 영역 (로그인 기능이 구현되면 이부분을 수정)
 
-      const myChat = await ChatList.findAll({ where: { userId } });
+      const myChat = await Chats.findAll({ where: { userId } });
 
-      return res.status(201).send({ data: myChat });
+      let myChatListIds = new Set();
+      myChat.forEach((chat) => {
+        myChatListIds.add(chat.dataValues.chatListId);
+      });
+
+      const result = await ChatList.findAll({
+        where: {
+          userId,
+        },
+        order: [['updatedAt', 'DESC']],
+      });
+
+      return res.status(201).send({ data: result });
     } catch (error) {
       next(error);
     }
