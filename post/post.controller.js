@@ -1,3 +1,4 @@
+const authLoginUserMiddleware = require('../middlewares/authLoginUserMiddleware');
 const PostService = require('./post.service');
 
 class PostController {
@@ -52,13 +53,14 @@ class PostController {
   // 거래글 상세 조회
   findOnePost = async (req, res, next) => {
     try {
+      const { userId } = res.locals.user;
       const { postId } = req.params;
       if (typeof (postId / 1) === NaN || postId.search(/\s/) != -1)
         throw new error('postId가 잘못됐습니다.');
 
       const findOnePost = await this.postService.findOnePost(postId);
 
-      const isWish = await this.postService.isWish(postId);
+      const isWish = await this.postService.isWish(postId, userId);
 
       const otherPosts = await this.postService.findPostByUser(
         findOnePost.userId,

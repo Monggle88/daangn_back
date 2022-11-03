@@ -55,8 +55,9 @@ class PostRepository {
   };
 
   // 찜 여부 확인
-  isWish = async (postId) => {
-    let isWish = await Wishes.findOne({ where: { postId } });
+  isWish = async (postId, userId) => {
+    console.log(userId);
+    let isWish = await Wishes.findOne({ where: { postId, userId } });
 
     isWish ? (isWish = true) : (isWish = false);
     return isWish;

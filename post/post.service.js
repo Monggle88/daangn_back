@@ -55,8 +55,8 @@ class PostService {
   };
 
   // 찜 여부 확인
-  isWish = async (postId) => {
-    let isWish = await this.postRepository.isWish(postId);
+  isWish = async (postId, userId) => {
+    let isWish = await this.postRepository.isWish(postId, userId);
 
     return isWish;
   };

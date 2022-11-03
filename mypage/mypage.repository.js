@@ -1,4 +1,7 @@
 const { Users, TransactionList, Wishes, SalePosts } = require('../models');
+const Sq = require('sequelize');
+const Sequelize = Sq.Sequelize;
+
 class MypageRepository {
   constructor() {}
 
@@ -30,19 +33,40 @@ class MypageRepository {
   // getWishlist 찜 목록 조회
   getWishlist = async (userId) => {
     const wishes = await Wishes.findAll({
+      attributes: ['postId'],
       where: { userId },
     });
 
-    let wishPosts = [];
+    //createdBy정현
+    const realWish = await Wishes.findAll({
+      where: { userId },
+      attributes: [
+        [Sequelize.col('SalePost.postId'), 'postId'], //postId
+        [Sequelize.col('SalePost.userId'), 'userId'], //userId
+        [Sequelize.col('SalePost.nickname'), 'nickname'], //nickname
+        [Sequelize.col('SalePost.profileImage'), 'profileImage'], //profileImage
+        [Sequelize.col('SalePost.categoryId'), 'categoryId'], //cateroryId
+        [Sequelize.col('SalePost.locationId'), 'locationId'], //locationId
+        [Sequelize.col('SalePost.title'), 'title'], //title
+        [Sequelize.col('SalePost.content'), 'content'], //content
+        [Sequelize.col('SalePost.postImgUrl'), 'postImgUrl'], //postImgUrl
+        [Sequelize.col('SalePost.price'), 'price'], //price
+        [Sequelize.col('SalePost.status'), 'status'], //status
+        [Sequelize.col('SalePost.wishCount'), 'wishCount'], //wishCount
+        [Sequelize.col('SalePost.chatCount'), 'chatCount'], //chatCount
+        [Sequelize.col('SalePost.createdAt'), 'createdAt'], //createdAt
+        [Sequelize.col('SalePost.updatedAt'), 'updatedAt'],
+      ],
+      include: [
+        {
+          model: SalePosts,
+          attributes: [],
+        },
+      ],
+      order: [[{ model: SalePosts }, 'updatedAt', 'DESC']],
+    });
 
-    for (let i = 0; i < wishes.length; i++) {
-      let tempPost = await SalePosts.findOne({
-        where: { postId: wishes[i].postId },
-      });
-      wishPosts.push(tempPost);
-    }
-
-    return wishPosts;
+    return realWish;
   };
 
   // changeProfileImg 프로필 이미지 변경
