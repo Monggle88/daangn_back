@@ -1,5 +1,9 @@
 # 당근마켓 클론코딩
 
+**22.10.28 ~ 22.11.03 1주 동안 진행된 클론코딩 프로젝트**
+
+[시연영상(YouTube)](https://youtu.be/TLykg2mp9DM)
+
 ## ERD
 ![ERD](https://user-images.githubusercontent.com/106243912/209362350-ae6caed3-6cc6-4ecd-b9d8-9f30a6849bb4.png)
 
